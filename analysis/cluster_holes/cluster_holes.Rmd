@@ -1,0 +1,247 @@
+---
+title: "cluster_holes"
+author: "Jarrod Pelkofer"
+date: "4/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load Libraries
+```{r}
+library(DBI)
+library(RPostgres)
+library(tidyverse)
+library(lubridate)
+library(tidymodels)
+library(embed)
+library(plotly)
+library(DataExplorer)
+library(furrr)
+
+
+plan(multisession, workers = 4)
+
+theme_set(theme_minimal())
+
+memory.limit(size = 32000)
+
+```
+
+# Get Hole Data
+```{r}
+seasons <- c(2016:2018)
+recent_seasons <- c(2019:2020)
+
+con <- dbConnect(
+  drv = RPostgres::Postgres(),
+  user = "postgres",
+  password = keyring::key_get("postgres_db", "postgres"),
+  dbname = "golf_db",
+)
+
+holes_data <- 
+  tbl(con, "holes_tbl") %>%
+  filter(round != 5 & par %in% c(3,4,5)) %>% 
+  mutate(player_name = case_when(
+    player_name == "Ali Al-Shahrani" ~ "Ali Al Shahrani",
+    TRUE ~ player_name
+  )) %>%
+  filter(season %in% c(recent_seasons)) %>% 
+  select(player_name, season:course_id, round:yards, score_type, dk_pts_classic, field_dk_classic_avg, dk_pts_gained_classic) %>% 
+  collect()
+```
+
+# Build Course/Round Effects Function
+```{r}
+
+course_rd_effects_function <- function(year) {
+  
+  holes_tbl <- 
+    holes_data %>% 
+    filter(season %in% c(year))
+  
+  # avg dk points per hole for each tourney, course, round combo
+  avg_dk_hole_score_by_tourney_rd_tbl <-
+    holes_tbl %>%
+    unite("tournament_round_id", c(tournament_id:round)) %>%
+    group_by(tournament_round_id) %>%
+    summarise(avg_dk_hole_score = mean(dk_pts_classic))
+  
+  
+  dk_pts_gained_rd <-
+    holes_tbl %>%
+    unite("tournament_round_id", c(tournament_id:round)) %>%
+    group_by(player_name, tournament_round_id) %>%
+    summarise(total_dk_pts_gained = sum(dk_pts_gained_classic)) %>%
+    ungroup() %>%
+    # lumping players together that have played less than 25 rounds in past year
+    mutate(player_name = fct_lump_min(player_name, 25)) %>%
+    # left_join(avg_dk_hole_score_by_tourney_rd_tbl) %>%
+    select(player_name, tournament_round_id, total_dk_pts_gained)
+  
+  # Create Dummy Vars for each player and tourney/course/rd combo
+  course_rd_effect_recipe <-
+    recipe(~ ., data = dk_pts_gained_rd) %>%
+    step_dummy(all_nominal(), one_hot = TRUE)
+  
+  course_rd_effect_data <-
+    course_rd_effect_recipe %>% prep() %>% bake(new_data = NULL)
+  
+  # Run Course Effects Model
+  course_rd_effect_model <-
+    lm(total_dk_pts_gained ~ . , data = course_rd_effect_data)
+  
+  course_round_effect_tbl <-
+    tidy(course_rd_effect_model) %>%
+    filter(term %>% str_detect("tournament_round_id")) %>%
+    arrange(estimate) %>%
+    mutate(term = term %>% str_sub(22,-1)) %>%
+    select(tournament_round_id = term,
+           course_rd_effect = estimate) %>%
+    mutate(course_rd_effect_per_hole = course_rd_effect / 18)
+  
+  # Adjust DK Points Gained
+  holes_tbl %>%
+    unite("tournament_round_id", c(tournament_id:round)) %>%
+    left_join(course_round_effect_tbl, by = "tournament_round_id") %>%
+    mutate(adj_field_dk_avg = field_dk_classic_avg - course_rd_effect_per_hole) %>%
+    mutate(adj_dk_pts_gained = (dk_pts_gained_classic - course_rd_effect_per_hole))
+  
+}
+```
+
+```{r}
+adj_dk_pts_gained_2016 <- course_rd_effects_function(2016)
+adj_dk_pts_gained_2017 <- course_rd_effects_function(2017)
+adj_dk_pts_gained_2018 <- course_rd_effects_function(2018)
+adj_dk_pts_gained_2019 <- course_rd_effects_function(2019)
+adj_dk_pts_gained_2020 <- course_rd_effects_function(2020)
+
+adj_dk_pts_gained_2016_17_18 <- 
+  adj_dk_pts_gained_2016 %>% 
+  bind_rows(adj_dk_pts_gained_2017) %>% 
+  bind_rows(adj_dk_pts_gained_2018)
+
+write_csv(adj_dk_pts_gained_2016_17_18, "adj_dk_pts_gained_2016_17_18.csv")
+
+adj_dk_pts_gained_2016_17_18 <- read_csv(file = "adj_dk_pts_gained_2016_17_18.csv")
+
+adj_dk_pts_gained_2016_2020 <- 
+  adj_dk_pts_gained_2016_17_18 %>% 
+  bind_rows(adj_dk_pts_gained_2019) %>% 
+  bind_rows(adj_dk_pts_gained_2020)
+
+write_csv(adj_dk_pts_gained_2016_2020, "adj_dk_pts_gained_2016_2020.csv")
+```
+
+# Start of Kmeans
+```{r}
+adj_dk_pts_gained_2016_17_18 <- read_csv("adj_dk_pts_gained_2016_17_18.csv")
+
+kmeans_feature_tbl <- 
+  adj_dk_pts_gained_2016_17_18 %>% 
+  select(tournament_round_id, hole, par, yards, adj_field_dk_avg) %>% 
+  distinct()
+
+kmeans_feature_tbl <- 
+  adj_dk_pts_gained_2016_2020 %>% 
+  select(tournament_round_id, hole, par, yards, adj_field_dk_avg) %>% 
+  distinct()
+```
+
+# Kmeans Recipe
+```{r}
+
+# kmeans recipe
+cluster_rec <- 
+  recipe( ~ ., data = kmeans_feature_tbl) %>%
+  update_role(tournament_round_id, new_role = "ID") %>% 
+  update_role(hole, new_role = "ID") %>%
+  step_knnimpute(yards, adj_field_dk_avg) %>% 
+  step_normalize(all_predictors())
+
+cluster_rec
+
+kmeans_feature_data_baked <- cluster_rec %>% prep() %>% bake(new_data = NULL)
+```
+
+# Perform Kmeans
+```{r}
+
+# kmeans function
+kmeans_mapper <- function(centers = 3) {
+    
+    kmeans_feature_data_baked %>%
+        select(-tournament_round_id, -hole, -par, -yards) %>%
+        kmeans(centers = centers, nstart = 1)
+  
+}
+
+kmeans_mapped_tbl <- 
+    tibble(centers = 1:9) %>%
+    mutate(k_means = centers %>% map(kmeans_mapper)) %>%
+    mutate(glance  = k_means %>% map(glance))
+
+kmeans_mapped_tbl %>% 
+  unnest(glance) %>% 
+  select(centers, tot.withinss) %>% 
+  ggplot(aes(centers, tot.withinss)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:9))
+
+#pluck centers = 3
+kmeans_3_obj <- 
+  kmeans_mapped_tbl %>% 
+  pull(k_means) %>% 
+  purrr::pluck(3)
+
+kmeans_joined_data <- 
+  kmeans_3_obj %>% 
+  augment(kmeans_feature_data_baked)
+```
+
+# Umap
+```{r}
+umap_rec <- 
+  recipe( ~ ., data = kmeans_feature_tbl) %>%
+  update_role(tournament_round_id, new_role = "ID") %>% 
+  update_role(hole, new_role = "ID") %>%
+  step_knnimpute(yards, adj_field_dk_avg) %>% 
+  step_normalize(all_predictors()) %>% 
+  step_umap(all_predictors())
+
+holes_umap_data <- umap_rec %>% prep() %>% bake(new_data = NULL)
+
+hole_cluster_data <- 
+  holes_umap_data %>%
+  left_join(kmeans_feature_tbl) %>%
+  left_join(select(kmeans_joined_data, tournament_round_id, hole, .cluster))
+
+umap_g1 <- 
+  hole_cluster_data %>% 
+  mutate(label = str_glue("Par: {par}
+                          Yards: {yards}
+                          DK_Round_Pts_Adj: {adj_field_dk_avg}
+                          cluster: {.cluster}")) %>% 
+  ggplot(aes(umap_1, umap_2)) + 
+  geom_point(aes(color = .cluster, text = label), alpha = .7)
+
+ggplotly(umap_g1)
+
+# categorize cluster
+hole_categories_tbl <-
+  hole_cluster_data %>%
+  mutate(hole_category = case_when(
+    .cluster == 1 ~ "medium",
+    .cluster == 2 ~ "hard",
+    .cluster == 3 ~ "easy"
+  ))
+
+write_csv(hole_categories_tbl, "hole_categories_tbl.csv")
+write_csv(hole_categories_tbl, "hole_categories_2016_2020_tbl.csv")
+```
+

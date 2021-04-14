@@ -105,6 +105,46 @@ scrape_tournament_locations <- function(tour, season, tournament_id, tournament_
 #               "tournament_name")
 #   )))
 
+scrape_hole_description_function <- function(tour, tournament_id) {
+  
+  # this function is essentially used to scrape the yardage for each hole
+  
+  # read json
+  holes_json <- jsonlite::read_json(paste0("https://site.web.api.espn.com/apis/site/v2/sports/golf/", tour, "/leaderboard/course?region=us&lang=en&event=", tournament_id))
+  
+  # get course id(s) for tournament
+  courseId_list <- 
+    holes_json %>% 
+    purrr::pluck("courses") %>% 
+    map_chr( ~ purrr::pluck(.x, "courseId"))
+  
+  # get yardage data
+  holes_json %>% 
+    purrr::pluck("courses") %>% 
+    map( ~ purrr::pluck(.x, "holes")) %>% 
+    enframe() %>% 
+    mutate(course_id = courseId_list) %>% 
+    mutate(tournament_id = tournament_id) %>% 
+    unnest_longer(value) %>% 
+    unnest_wider(value) %>% 
+    select(tournament_id, course_id, holeNumber:holeYards) %>% 
+    rename(hole = holeNumber,
+           yards = holeYards) %>% 
+    janitor::clean_names()
+  
+}
+
+# Example
+# tournament_holes <-
+#   tournaments_tbl %>% 
+#   filter(tour %in% c("pga", "ntw")) %>% 
+#   future_pmap(purrr::possibly(scrape_hole_description_function, otherwise = NA)) %>% 
+#   enframe() %>% 
+#   filter(!is.na(value)) %>% 
+#   unnest(value) %>% 
+#   select(-name)
+
+
 scrape_player_ids_tournament <- function(tour, season, tournament_id){
   #funtion returns all player ids for a single tournament
   #enter tournament id and season to return a vector of all player ids in tournament
@@ -562,7 +602,9 @@ check_stats_data <- function(df) {
   
   # looking for two empty tables here
   return(list_of_stats_dfs)
-}          
+}  
+
+
 
 
 fix_euro_names <- function(data) {
@@ -572,7 +614,7 @@ fix_euro_names <- function(data) {
     mutate(
       player_name =
         case_when(
-          player_name == "Alexander Björk" ~ "Alexander Bjork",
+          player_name == "Alexander Bj?rk" ~ "Alexander Bjork",
           player_name == "Alex Noren" ~ "Alexander Noren",
           player_name == "Bryson Dechambeau" ~ "Bryson DeChambeau",
           player_name == "Byeong-Hun An" ~ "Byeong Hun An",
@@ -580,43 +622,43 @@ fix_euro_names <- function(data) {
           player_name == "Erik Van Rooyen" ~ "Erik van Rooyen",
           player_name == "Harold Varner Iii" ~ "Harold Varner III",
           player_name == "JC Ritchie" ~ "J.C. Ritchie",
-          player_name == "Pablo Larrazábal" ~ "Pablo Larrazabal",
+          player_name == "Pablo Larraz?bal" ~ "Pablo Larrazabal",
           player_name == "Rafa Cabrera Bello" ~ "Rafael Cabrera Bello",
           player_name == "Robert Macintyre" ~ "Robert MacIntyre",
           player_name == "Rory Mcilroy" ~ "Rory McIlroy",
-          player_name == "Søren Kjeldsen" ~ "Soren Kjeldsen",
-          player_name == "Thomas Bjørn" ~ "Thomas Bjorn",
-          player_name == "Thorbjørn Olesen" ~ "Thorbjorn Olesen",
+          player_name == "S?ren Kjeldsen" ~ "Soren Kjeldsen",
+          player_name == "Thomas Bj?rn" ~ "Thomas Bjorn",
+          player_name == "Thorbj?rn Olesen" ~ "Thorbjorn Olesen",
           player_name == "Ali Al-Shahrani" ~ "Ali Al Shahrani", # updates needed 2/26 starting here and below
           player_name == "Ashun Wu" ~ "A-Shun Wu",
           player_name == "Bryden Macpherson" ~ "Bryden MacPherson",
-          player_name == "Clément Sordet" ~ "Clement Sordet",
+          player_name == "Cl?ment Sordet" ~ "Clement Sordet",
           player_name == "D A Points" ~ "D.A. Points",
           player_name == "Daniel Van Tonder" ~ "Daniel van Tonder",
-          player_name == "Gonzalo Fdez-Castaño" ~ "Gonzalo Fernandez-Castano",
+          player_name == "Gonzalo Fdez-Casta?o" ~ "Gonzalo Fernandez-Castano",
           player_name == "Graeme Mcdowell" ~ "Graeme McDowell",
           player_name == "Graham Delaet" ~ "Graham DeLaet",
-          player_name == "Grégory Bourdy" ~ "Gregory Bourdy",
+          player_name == "Gr?gory Bourdy" ~ "Gregory Bourdy",
           player_name == "Inhoi Hur" ~ "In-hoi Hur",
           player_name == "James Sugrue  (Am)" ~ "James Sugrue",
           player_name == "Jayden Trey Schaper" ~ "Jayden Schaper",
           player_name == "Jbe Kruger" ~ "Jbe' Kruger",
-          player_name == "José María Olazábal" ~ "Jose Maria Olazabal",
+          player_name == "Jos? Mar?a Olaz?bal" ~ "Jose Maria Olazabal",
           player_name == "Lee Mccoy" ~ "Lee McCoy",
           player_name == "Leun-kwang Kim" ~ "Leun-Kwang Kim",
           player_name == "Marcos Pastor Rufain" ~ "Marcos Rufain",
           player_name == "Mark Power  (Am)" ~ "Mark Power",
-          player_name == "Miguel Ángel Jiménez" ~ "Miguel Angel Jimenez",
+          player_name == "Miguel ?ngel Jim?nez" ~ "Miguel Angel Jimenez",
           player_name == "Nick Mccarthy" ~ "Nick McCarthy",
-          player_name == "Nicolai Højgaard" ~ "Nicolai Hojgaard",
+          player_name == "Nicolai H?jgaard" ~ "Nicolai Hojgaard",
           player_name == "Pedro Lencart Silva" ~ "Pedro Lencart",
-          player_name == "Per Längfors" ~ "Per Langfors",
-          player_name == "Rasmus Højgaard" ~ "Rasmus Hojgaard",
+          player_name == "Per L?ngfors" ~ "Per Langfors",
+          player_name == "Rasmus H?jgaard" ~ "Rasmus Hojgaard",
           player_name == "Richard T Lee" ~ "Richard T. Lee",
           player_name == "Robert Mcintyre" ~ "Robert McIntyre",
           player_name == "Rodolfo Cazaubon Jnr" ~ "Rodolfo Cazaubon",
           player_name == "Ryan Mccormick" ~ "Ryan McCormick",
-          player_name == "Sami Välimäki" ~ "Sami Valimaki",
+          player_name == "Sami V?lim?ki" ~ "Sami Valimaki",
           player_name == "Sean O'hair" ~ "Sean O'Hair",
           player_name == "Sebastian Garcia Rdez" ~ "Sebastian Garcia Rodriguez",
           player_name == "Siyanda Mwandla" ~ "Siyanda Mwandia",

@@ -1,199 +1,320 @@
-tour,season,tournament_id,tournament_name,course,location,tournament_link
-euro,2021,2021101,Abu Dhabi HSBC Championship,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-championship-2021/
-euro,2021,2021102,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2021/
-euro,2021,2021103,Saudi International powered by SoftBank Investment Advisers,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia",/european-tour/saudi-international-powered-by-softbank-investment-advisers-2021/
-euro,2020,2020001,Alfred Dunhill Championship,Leopard Creek CC," Malelane, South Africa",/european-tour/alfred-dunhill-championship-2020/
-euro,2020,2020002,AFRASIA BANK Mauritius Open,Heritage GC," Heritage Bel Ombre, Mauritius",/european-tour/afrasia-bank-mauritius-open-2020/
-euro,2020,2020003,Australian PGA Championship,RACV Royal Pines Resort," Gold Coast, Queensland, Australia",/european-tour/australian-pga-championship-2020/
-euro,2020,2020006,South African Open hosted by the City of Johannesburg,Randpark GC," Johannesburg, South Africa",/european-tour/south-african-open-hosted-by-the-city-of-johannesburg-2020/
-euro,2020,2020008,Abu Dhabi HSBC Championship presented by EGA,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-championship-presented-by-ega-2020/
-euro,2020,2020010,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2020/
-euro,2020,2020012,Saudi International powered by SoftBank Investment Advisers,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia",/european-tour/saudi-international-powered-by-softbank-investment-advisers-2020/
-euro,2020,2020014,ISPS Handa Vic Open,13th Beach GC," Geelong, Victoria, Australia",/european-tour/isps-handa-vic-open-2020/
-euro,2020,2020020,Oman Open,Al Mouj Golf," Muscat, Oman",/european-tour/oman-open-2020/
-euro,2020,2020022,Commercial Bank Qatar Masters,Education City GC," Doha, Qatar",/european-tour/commercial-bank-qatar-masters-2020/
-euro,2020,2020731,Austrian Open,Diamond CC," Atzenbrugg, near Vienna, Austria",/european-tour/austrian-open-2020/
-euro,2020,2020732,Euram Bank Open,GC Adamstal," Ramsau, Austria",/european-tour/euram-bank-open-2020/
-euro,2020,2020066,Betfred British Masters hosted by Lee Westwood,Close House GC," Newcastle-upon-Tyne, England",/european-tour/betfred-british-masters-hosted-by-lee-westwood-2020/
-euro,2020,2020004,Hero Open,Forest of Arden Marriott Hotel & Country Club," Birmingham, England",/european-tour/hero-open-2020/
-euro,2020,2020005,English Championship,Hanbury Manor Marriott Hotel & Country Club," Ware, Hertfordshire, England",/european-tour/english-championship-2020/
-euro,2020,2020007,Celtic Classic,The Celtic Manor Resort," City of Newport, Wales",/european-tour/celtic-classic-2020/
-euro,2020,2020009,ISPS HANDA Wales Open,The Celtic Manor Resort," City of Newport, Wales",/european-tour/wales-open-2020/
-euro,2020,2020011,ISPS HANDA UK Championship,The Belfry," Sutton Coldfield, England",/european-tour/uk-championship-2020/
-euro,2020,2020038,Estrella Damm N.A. Andalucia Masters ,Real Club Valderrama," Sotogrande, Spain",/european-tour/estrella-damm-n-a-andalucia-masters/
-euro,2020,2020090,Portugal Masters,Dom Pedro Victoria Golf Course," Vilamoura, Portugal",/european-tour/portugal-masters-2020/
-euro,2020,2020750,Open de Portugal at Royal Óbidos,Royal Óbidos Spa & Golf Resort," Vau Óbidos, Portugal",/european-tour/open-de-portugal-at-royal-obidos-2020/
-euro,2020,2020046,Dubai Duty Free Irish Open,Galgorm Castle Golf Club," Ballymena, Northern Ireland",/european-tour/dubai-duty-free-irish-open-2020/
-euro,2020,2020060,Aberdeen Standard Investments Scottish Open,The Renaissance Club," North Berwick, Scotland",/european-tour/aberdeen-standard-investments-scottish-open-2020-x3118/
-euro,2020,2020078,BMW PGA Championship,Wentworth Golf Club," Virginia Water, Surrey, England",/european-tour/bmw-pga-championship-2020/
-euro,2020,2020102,Scottish Championship presented by AXA,Fairmont St Andrews," St Andrews, Fife, Scotland",/european-tour/scottish-championship-2020/
-euro,2020,2020086,Italian Open,Chervò Golf Club," San Vigilio di Pozzolengo, Brescia , Italy",/european-tour/italian-open-2020/
-euro,2020,2020100,Aphrodite Hills Cyprus Open,Aphrodite Hills Resort," Paphos, Cyprus",/european-tour/cyprus-open-2020/
-euro,2020,2020101,Aphrodite Hills Cyprus Showdown,Aphrodite Hills Resort," Paphos, Cyprus",/european-tour/cyprus-classic-2020/
-euro,2020,2020103,Joburg Open,Randpark GC," Johannesburg, South Africa",/european-tour/joburg-open-2020/
-euro,2020,2020104,Alfred Dunhill Championship,Leopard Creek CC," Malelane, South Africa",/european-tour/alfred-dunhill-championship-2020-x4972/
-euro,2020,2020106,Golf in Dubai Championship presented by DP World,Jumeirah Golf Estates," Dubai, UAE",/european-tour/golf-in-dubai-championship-presented-by-dp-world-2020/
-euro,2020,2020105,South African Open,Gary Player CC," Sun City, South Africa",/european-tour/south-african-open-2020/
-euro,2020,2020098,"DP World Tour Championship, Dubai",Jumeirah Golf Estates," Dubai, UAE",/european-tour/dp-world-tour-championship-dubai-2020/
-euro,2019,2019000,Honma Hong Kong Open presented by Amundi,Hong Kong GC," Fanling, Hong Kong",/european-tour/honma-hong-kong-open-presented-by-amundi-2019/
-euro,2019,2019003,Afrasia Bank Mauritius Open at Anahita,Four Seasons GC Mauritius at Anahita," Beau Champ, Mauritius",/european-tour/afrasia-bank-mauritius-open-at-anahita-2019/
-euro,2019,2019002,Australian PGA Championship,RACV Royal Pines Resort," Gold Coast, Queensland, Australia",/european-tour/australian-pga-championship-2019/
-euro,2019,2019004,South African Open hosted by the City of Johannesburg,Randpark GC," Johannesburg, South Africa",/european-tour/south-african-open-hosted-by-the-city-of-johannesburg-2019/
-euro,2019,2019006,Alfred Dunhill Championship,Leopard Creek CC," Malelane, South Africa",/european-tour/alfred-dunhill-championship-2019/
-euro,2019,2019010,Abu Dhabi HSBC Championship presented by EGA,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-championship-presented-by-ega-2019/
-euro,2019,2019012,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2019/
-euro,2019,2019014,Saudi International powered by SBIA,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia",/european-tour/saudi-international-powered-by-sbia-2019/
-euro,2019,2019016,ISPS Handa Vic Open,13th Beach GC," Geelong, Victoria, Australia",/european-tour/isps-handa-vic-open-2019/
-euro,2019,2019018,ISPS Handa World Super 6 Perth,Lake Karrinyup CC," Perth, Australia",/european-tour/isps-handa-world-super-6-perth-2019/
-euro,2019,2019022,Oman Open,Al Mouj Golf," Muscat, Oman",/european-tour/oman-open-2019/
-euro,2019,2019024,Commercial Bank Qatar Masters,Doha GC," Doha, Qatar",/european-tour/commercial-bank-qatar-masters-2019/
-euro,2019,2019026,Magical Kenya Open presented by Absa,Karen Country Club," Nairobi, Kenya",/european-tour/magical-kenya-open-presented-by-absa-2019/
-euro,2019,2019028,Maybank Championship,Saujana G&CC," Kuala Lumpur, Malaysia",/european-tour/maybank-championship-2019/
-euro,2019,2019031,Hero Indian Open,DLF G&CC," New Delhi, India",/european-tour/hero-indian-open-2019/
-euro,2019,2019038,Trophee Hassan II,Royal Golf Dar Es Salam," Rabat, Morocco",/european-tour/trophee-hassan-ii-2019/
-euro,2019,2019040,Volvo China Open,Genzon GC," Shenzhen, China",/european-tour/volvo-china-open-2019/
-euro,2019,2019042,Betfred British Masters,Hillside Golf Club," Southport, England",/european-tour/betfred-british-masters-2019/
-euro,2019,2019046,Made in Denmark presented by FREJA,HimmerLand," Farsø, Denmark",/european-tour/made-in-denmark-presented-by-freja-2019/
-euro,2019,2019048,Belgian Knockout,Rinkven International GC," Antwerp, Belgium",/european-tour/belgian-knockout-2019/
-euro,2019,2019050,GolfSixes Cascais,Oitavos Dunes," Cascais, Portugal",/european-tour/golfsixes-cascais-2019/
-euro,2019,2019054,BMW International Open,Golfclub München Eichenried," Munich, Germany",/european-tour/bmw-international-open-2019/
-euro,2019,2019056,Estrella Damm N.A. Andalucía Masters hosted by the Sergio Garcia Foundation,Real Club Valderrama," Sotogrande, Spain",/european-tour/estrella-damm-n-a-andalucia-masters-hosted-by-the-sergio-garcia-foundation-2019/
-euro,2019,2019058,Dubai Duty Free Irish Open,Lahinch GC," Lahinch, Co. Clare, Ireland",/european-tour/dubai-duty-free-irish-open-2019/
-euro,2019,2019060,Aberdeen Standard Investments Scottish Open,The Renaissance Club," North Berwick, Scotland",/european-tour/aberdeen-standard-investments-scottish-open-2019/
-euro,2019,2019070,D+D Real Czech Masters,Albatross Golf Resort," Prague, Czech Republic",/european-tour/d-d-real-czech-masters-2019/
-euro,2019,2019072,Scandinavian Invitation,Hills Golf & Sports Club," Gothenburg, Sweden",/european-tour/scandinavian-invitation-2019/
-euro,2019,2019074,Omega European Masters,Crans-sur-Sierre GC," Crans Montana, Switzerland",/european-tour/omega-european-masters-2019/
-euro,2019,2019076,Porsche European Open,Green Eagle Golf Courses," Hamburg, Germany",/european-tour/porsche-european-open-2019/
-euro,2019,2019078,KLM Open,The International," Amsterdam, Netherlands",/european-tour/klm-open-2019/
-euro,2019,2019080,BMW PGA Championship,Wentworth Golf Club," Virginia Water, Surrey, England",/european-tour/bmw-pga-championship-2019/
-euro,2019,2019082,Alfred Dunhill Links Championship,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland",/european-tour/alfred-dunhill-links-championship-2019/
-euro,2019,2019084,Mutuactivos Open de España,Kingsbarns Golf Links," Kingsbarns, Scotland",/european-tour/mutuactivos-open-de-espana-2019/
-euro,2019,2019086,Italian Open,Carnoustie," Angus, Scotland",/european-tour/italian-open-2019/
-euro,2019,2019088,Amundi Open de France,Club de Campo Villa de Madrid," Madrid, Spain",/european-tour/amundi-open-de-france-2019/
-euro,2019,2019090,Portugal Masters,Olgiata GC," Rome, Italy",/european-tour/portugal-masters-2019/
-euro,2019,2019093,Turkish Airlines Open,Dom Pedro Victoria Golf Course," Vilamoura, Portugal",/european-tour/turkish-airlines-open-2019/
-euro,2019,2019094,Nedbank Golf Challenge hosted by Gary Player,Sheshan International GC," Shanghai, China",/european-tour/nedbank-golf-challenge-hosted-by-gary-player-2019/
-euro,2019,2019095,"DP World Tour Championship, Dubai",The Montgomerie Maxx Royal," Antalya, Turkey",/european-tour/dp-world-tour-championship-dubai-2019/
-euro,2018,2017095,UBS Hong Kong Open,Hong Kong GC," Fanling, Hong Kong",/european-tour/ubs-hong-kong-open-2017/
-euro,2018,2017097,AfrAsia Bank Mauritius Open,Heritage GC," Heritage Bel Ombre, Mauritius",/european-tour/afrasia-bank-mauritius-open-2017/
-euro,2018,2017096,Australian PGA Championship,RACV Royal Pines Resort," Gold Coast, Queensland, Australia",/european-tour/australian-pga-championship-2017/
-euro,2018,2017098,Joburg Open,Randpark GC," Johannesburg, South Africa",/european-tour/joburg-open-2017/
-euro,2018,2018004,BMW SA Open hosted by the City of Ekurhuleni,Glendower GC," City of Ekurhuleni, Gauteng, South Africa",/european-tour/bmw-sa-open-hosted-by-the-city-of-ekurhuleni-2018/
-euro,2018,2018006,EURASIA CUP presented by DRB-HICOM,Glenmarie G & CC," Kuala Lumpur, Malaysia",/european-tour/eurasia-cup-presented-by-drb-hicom-2018/
-euro,2018,2018008,Abu Dhabi HSBC Championship presented by EGA,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-championship-presented-by-ega-2018/
-euro,2018,2018010,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2018/
-euro,2018,2018012,Maybank Championship,Saujana G&CC," Kuala Lumpur, Malaysia",/european-tour/maybank-championship-2018/
-euro,2018,2018014,ISPS Handa World Super 6 Perth,Lake Karrinyup CC," Perth, Australia",/european-tour/isps-handa-world-super-6-perth-2018/
-euro,2018,2018016,NBO Oman Open,Al Mouj Golf," Muscat, Oman",/european-tour/nbo-oman-open-2018/
-euro,2018,2018018,Commercial Bank Qatar Masters,Doha GC," Doha, Qatar",/european-tour/commercial-bank-qatar-masters-2018/
-euro,2018,2018021,Tshwane Open,Pretoria CC," Waterkloof, South Africa",/european-tour/tshwane-open-2018/
-euro,2018,2018022,Hero Indian Open,DLF G&CC," New Delhi, India",/european-tour/hero-indian-open-2018/
-euro,2018,2018032,Open de España,Centro Nacional de Golf," Madrid, Spain",/european-tour/open-de-espana-2018/
-euro,2018,2018034,Trophee Hassan II,Royal Golf Dar Es Salam," Rabat, Morocco",/european-tour/trophee-hassan-ii-2018/
-euro,2018,2018036,Volvo China Open,Topwin Golf & CC," Beijing, China",/european-tour/volvo-china-open-2018/
-euro,2018,2018038,GolfSixes,Centurion Club," St Albans, England",/european-tour/golfsixes-2018/
-euro,2018,2018040,Rocco Forte Sicilian Open,Verdura GC," Agrigento, Sicily, Italy",/european-tour/rocco-forte-sicilian-open-2018/
-euro,2018,2018042,Belgian Knockout,Rinkven International GC," Antwerp, Belgium",/european-tour/belgian-knockout-2018/
-euro,2018,2018044,BMW PGA Championship,Wentworth Golf Club," Virginia Water, Surrey, England",/european-tour/bmw-pga-championship-2018/
-euro,2018,2018046,Italian Open,Gardagolf CC," Brescia, Italy",/european-tour/italian-open-2018/
-euro,2018,2018048,Shot Clock Masters,Diamond CC," Atzenbrugg, near Vienna, Austria",/european-tour/shot-clock-masters-2018/
-euro,2018,2018052,BMW International Open,Golf Club Gut Laerchenhof," Pulheim, Germany",/european-tour/bmw-international-open-2018/
-euro,2018,2018054,HNA Open de France,Le Golf National," Paris, France",/european-tour/hna-open-de-france-2018/
-euro,2018,2018056,Dubai Duty Free Irish Open hosted by the Rory Foundation,Ballyliffin GC," Co. Donegal, Ireland",/european-tour/dubai-duty-free-irish-open-hosted-by-the-rory-foundation-2018/
-euro,2018,2018058,Aberdeen Standard Investments Scottish Open,Gullane GC," Gullane, East Lothian, Scotland",/european-tour/aberdeen-standard-investments-scottish-open-2018/
-euro,2018,2018062,Porsche European Open,Green Eagle Golf Courses," Hamburg, Germany",/european-tour/porsche-european-open-2018/
-euro,2018,2018065,Fiji International presented by Fiji Airways,Natadola Bay GC," Natadola, Fiji",/european-tour/fiji-international-presented-by-fiji-airways-2018/
-euro,2018,2018067,European Golf Team Championships,Gleneagles," Auchterarder, Perthshire, Scotland",/european-tour/european-golf-team-championships-2018/
-euro,2018,2018068,Nordea Masters,Hills Golf & Sports Club," Gothenburg, Sweden",/european-tour/nordea-masters-2018/
-euro,2018,2018070,D+D Real Czech Masters,Albatross Golf Resort," Prague, Czech Republic",/european-tour/d-d-real-czech-masters-2018/
-euro,2018,2018072,Made In Denmark,Silkeborg Ry GC," Aarhus, Denmark",/european-tour/made-in-denmark-2018/
-euro,2018,2018074,Omega European Masters,Crans-sur-Sierre GC," Crans Montana, Switzerland",/european-tour/omega-european-masters-2018/
-euro,2018,2018076,KLM Open,The Dutch," Spijk, Netherlands",/european-tour/klm-open-2018/
-euro,2018,2018078,Portugal Masters,Dom Pedro Victoria Golf Course," Vilamoura, Portugal",/european-tour/portugal-masters-2018/
-euro,2018,2018080,Alfred Dunhill Links Championship,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland",/european-tour/alfred-dunhill-links-championship-2018/
-euro,2018,2018082,Sky Sports British Masters,Kingsbarns Golf Links," Kingsbarns, Scotland",/european-tour/sky-sports-british-masters-2018/
-euro,2018,2018084,Andalucia Valderrama Masters hosted by the Sergio Garcia Foundation,Carnoustie," Angus, Scotland",/european-tour/andalucia-valderrama-masters-hosted-by-the-sergio-garcia-foundation-2018/
-euro,2018,2018088,Turkish Airlines Open,Real Club Valderrama," Sotogrande, Spain",/european-tour/turkish-airlines-open-2018/
-euro,2018,2018089,Nedbank Golf Challenge hosted by Gary Player,Sheshan International GC," Shanghai, China",/european-tour/nedbank-golf-challenge-hosted-by-gary-player-2018/
-euro,2018,2018090,"DP World Tour Championship, Dubai",Regnum Carya Golf & Spa Resort," Antalya, Turkey",/european-tour/dp-world-tour-championship-dubai-2018/
-euro,2018,2018091,2018 ISPS Handa Melbourne World Cup of Golf,Gary Player CC," Sun City, South Africa",/european-tour/2018-isps-handa-melbourne-world-cup-of-golf-2018/
-euro,2017,2016096,Australian PGA Championship,RACV Royal Pines Resort," Gold Coast, Queensland, Australia",/european-tour/australian-pga-championship-2016/
-euro,2017,2016098,UBS Hong Kong Open,Hong Kong GC," Fanling, Hong Kong",/european-tour/ubs-hong-kong-open-2016/
-euro,2017,2017002,BMW SA Open hosted by City of Ekurhuleni,Glendower GC," City of Ekurhuleni, Gauteng, South Africa",/european-tour/bmw-sa-open-hosted-by-city-of-ekurhuleni-2017/
-euro,2017,2017004,Abu Dhabi HSBC Championship,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-championship-2017/
-euro,2017,2017006,Commercial Bank Qatar Masters,Doha GC," Doha, Qatar",/european-tour/commercial-bank-qatar-masters-2017/
-euro,2017,2017008,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2017/
-euro,2017,2017010,Maybank Championship,Saujana G&CC," Kuala Lumpur, Malaysia",/european-tour/maybank-championship-2017/
-euro,2017,2017012,ISPS HANDA World Super 6 Perth,Lake Karrinyup CC," Perth, Australia",/european-tour/isps-handa-world-super-6-perth-2017/
-euro,2017,2017014,Joburg Open,Royal Johannesburg & Kensington GC," Johannesburg, South Africa",/european-tour/joburg-open-2017-x7985/
-euro,2017,2017018,Tshwane Open,Pretoria CC," Waterkloof, South Africa",/european-tour/tshwane-open-2017/
-euro,2017,2017020,Hero Indian Open,DLF G&CC," New Delhi, India",/european-tour/hero-indian-open-2017/
-euro,2017,2017030,Trophee Hassan II,Royal Golf Dar Es Salam," Rabat, Morocco",/european-tour/trophee-hassan-ii-2017/
-euro,2017,2017032,Shenzhen International,Genzon GC," Shenzhen, China",/european-tour/shenzhen-international-2017/
-euro,2017,2017034,Volvo China Open,Topwin Golf & CC," Beijing, China",/european-tour/volvo-china-open-2017/
-euro,2017,2017038,Open de Portugal at Morgado Golf Resort,Morgado G&CC," Portimao, Portugal",/european-tour/open-de-portugal-at-morgado-golf-resort-2017/
-euro,2017,2017040,"Rocco Forte Open - Verdura, Sicily",Verdura GC," Agrigento, Sicily, Italy",/european-tour/rocco-forte-open-verdura-sicily-2017/
-euro,2017,2017042,BMW PGA Championship,Wentworth Golf Club," Virginia Water, Surrey, England",/european-tour/bmw-pga-championship-2017/
-euro,2017,2017044,Nordea Masters,Barsebäck G&CC," Malmö, Sweden",/european-tour/nordea-masters-2017/
-euro,2017,2017046,LYONESS OPEN powered by ORGANIC+,Diamond CC," Atzenbrugg, near Vienna, Austria",/european-tour/lyoness-open-powered-by-organic-2017/
-euro,2017,2017050,BMW International Open,Golfclub München Eichenried," Munich, Germany",/european-tour/bmw-international-open-2017/
-euro,2017,2017052,HNA Open de France,Le Golf National," Paris, France",/european-tour/hna-open-de-france-2017/
-euro,2017,2017054,Dubai Duty Free Irish Open hosted by the Rory Foundation,Portstewart GC," Co. Derry / Co. Londonderry, Northern Ireland",/european-tour/dubai-duty-free-irish-open-hosted-by-the-rory-foundation-2017/
-euro,2017,2017056,Aberdeen Asset Management Scottish Open,Dundonald Links," Troon, Ayrshire, Scotland",/european-tour/aberdeen-asset-management-scottish-open-2017/
-euro,2017,2017060,Porsche European Open,Green Eagle Golf Courses," Hamburg, Germany",/european-tour/porsche-european-open-2017/
-euro,2017,2017066,Saltire Energy Paul Lawrie Match Play,Golf Resort Bad Griesbach," Bad Griesbach, Germany",/european-tour/saltire-energy-paul-lawrie-match-play-2017/
-euro,2017,2017068,Fiji International,Natadola Bay GC," Natadola, Fiji",/european-tour/fiji-international-2017/
-euro,2017,2017070,Made In Denmark,HimmerLand," Farsø, Denmark",/european-tour/made-in-denmark-2017/
-euro,2017,2017072,D+D REAL Czech Masters,Albatross Golf Resort," Prague, Czech Republic",/european-tour/d-d-real-czech-masters-2017/
-euro,2017,2017074,Omega European Masters,Crans-sur-Sierre GC," Crans Montana, Switzerland",/european-tour/omega-european-masters-2017/
-euro,2017,2017076,KLM Open,The Dutch," Spijk, Netherlands",/european-tour/klm-open-2017/
-euro,2017,2017078,Portugal Masters,Dom Pedro Victoria Golf Course," Vilamoura, Portugal",/european-tour/portugal-masters-2017/
-euro,2017,2017080,British Masters supported by Sky Sports,Close House GC," Newcastle-upon-Tyne, England",/european-tour/british-masters-supported-by-sky-sports-2017/
-euro,2017,2017082,Alfred Dunhill Links Championship,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland",/european-tour/alfred-dunhill-links-championship-2017/
-euro,2017,2017084,Italian Open,Kingsbarns Golf Links," Kingsbarns, Scotland",/european-tour/italian-open-2017/
-euro,2017,2017086,Andalucia Valderrama Masters hosted by the Sergio Garcia Foundation,Carnoustie," Angus, Scotland",/european-tour/andalucia-valderrama-masters-hosted-by-the-sergio-garcia-foundation-2017/
-euro,2017,2017090,Turkish Airlines Open,Real Club Valderrama," Sotogrande, Spain",/european-tour/turkish-airlines-open-2017/
-euro,2017,2017092,Nedbank Golf Challenge hosted by Gary Player,Sheshan International GC," Shanghai, China",/european-tour/nedbank-golf-challenge-hosted-by-gary-player-2017/
-euro,2017,2017094,"DP World Tour Championship, Dubai",Regnum Carya Golf & Spa Resort," Antalya, Turkey",/european-tour/dp-world-tour-championship-dubai-2017/
-euro,2016,2015092,Alfred Dunhill Championship,Leopard Creek CC," Malelane, South Africa",/european-tour/alfred-dunhill-championship-2015/
-euro,2016,2015095,Australian PGA Championship,RACV Royal Pines Resort," Gold Coast, Queensland, Australia",/european-tour/australian-pga-championship-2015/
-euro,2016,2016000,BMW SA Open hosted by City of Ekurhuleni,Glendower GC," City of Ekurhuleni, Gauteng, South Africa",/european-tour/bmw-sa-open-hosted-by-city-of-ekurhuleni-2016/
-euro,2016,2016002,Joburg Open,Royal Johannesburg & Kensington GC," Johannesburg, South Africa",/european-tour/joburg-open-2016/
-euro,2016,2016003,EURASIA CUP presented by DRB-HICOM,Glenmarie G & CC," Kuala Lumpur, Malaysia",/european-tour/eurasia-cup-presented-by-drb-hicom-2016/
-euro,2016,2016004,Abu Dhabi HSBC Golf Championship,Abu Dhabi GC," Abu Dhabi, UAE",/european-tour/abu-dhabi-hsbc-golf-championship-2016/
-euro,2016,2016006,Commercial Bank Qatar Masters,Doha GC," Doha, Qatar",/european-tour/commercial-bank-qatar-masters-2016/
-euro,2016,2016008,Omega Dubai Desert Classic,Emirates GC," Dubai, UAE",/european-tour/omega-dubai-desert-classic-2016/
-euro,2016,2016010,Tshwane Open,Pretoria CC," Waterkloof, South Africa",/european-tour/tshwane-open-2016/
-euro,2016,2016012,Maybank Championship Malaysia,Royal Selangor GC," Kuala Lumpur, Malaysia",/european-tour/maybank-championship-malaysia-2016/
-euro,2016,2016014,ISPS HANDA Perth International,Lake Karrinyup CC," Perth, Australia",/european-tour/isps-handa-perth-international-2016/
-euro,2016,2016018,True Thailand Classic presented by Chang,Black Mountain GC," Hua Hin, Thailand",/european-tour/true-thailand-classic-presented-by-chang-2016/
-euro,2016,2016020,Hero Indian Open,Delhi GC," New Delhi, India",/european-tour/hero-indian-open-2016/
-euro,2016,2016028,"Real Club Valderrama Open de España, hosted by the Sergio Garcia Foundation",Real Club Valderrama," Sotogrande, Spain",/european-tour/real-club-valderrama-open-de-espana-hosted-by-the-sergio-garcia-foundation-2016/
-euro,2016,2016030,Shenzhen International,Genzon GC," Shenzhen, China",/european-tour/shenzhen-international-2016/
-euro,2016,2016032,Volvo China Open,Topwin Golf & CC," Beijing, China",/european-tour/volvo-china-open-2016/
-euro,2016,2016034,Trophée Hassan II,Royal Golf Dar Es Salam," Rabat, Morocco",/european-tour/trophee-hassan-ii-2016/
-euro,2016,2016036,AfrAsia Bank Mauritius Open,Four Seasons GC Mauritius at Anahita," Beau Champ, Mauritius",/european-tour/afrasia-bank-mauritius-open-2016/
-euro,2016,2016038,Dubai Duty Free Irish Open hosted by the Rory Foundation,The K Club," Straffan, Co. Kildare, Ireland",/european-tour/dubai-duty-free-irish-open-hosted-by-the-rory-foundation-2016/
-euro,2016,2016040,BMW PGA Championship,Wentworth Golf Club," Virginia Water, Surrey, England",/european-tour/bmw-pga-championship-2016/
-euro,2016,2016042,Nordea Masters,Bro Hof Slott GC," Stockholm, Sweden",/european-tour/nordea-masters-2016/
-euro,2016,2016044,Lyoness Open powered by Sporthilfe Cashback Card,Diamond CC," Atzenbrugg, near Vienna, Austria",/european-tour/lyoness-open-powered-by-sporthilfe-cashback-card-2016/
-euro,2016,2016048,BMW International Open,Golf Club Gut Lärchenhof," Cologne, Germany",/european-tour/bmw-international-open-2016/
-euro,2016,2016050,100th Open de France,Le Golf National," Paris, France",/european-tour/100th-open-de-france-2016/
-euro,2016,2016052,Aberdeen Asset Management Scottish Open,Castle Stuart Golf Links," Inverness, Scotland",/european-tour/aberdeen-asset-management-scottish-open-2016/
-euro,2016,2016056,King’s Cup presented by PTT Group,Phoenix Gold Golf Club," Pattaya, Thailand",/european-tour/king-s-cup-presented-by-ptt-group-2016/
-euro,2016,2016060,Aberdeen Asset Management Paul Lawrie Match Play,Archerfield," East Lothian, Scotland",/european-tour/aberdeen-asset-management-paul-lawrie-match-play-2016/
-euro,2016,2016062,Olympic Men's Golf Competition,Olympic Golf Course," Rio de Janeiro, Brazil",/european-tour/olympic-men-s-golf-competition-2016/
-euro,2016,2016064,D+D REAL Czech Masters,Albatross Golf Resort," Prague, Czech Republic",/european-tour/d-d-real-czech-masters-2016/
-euro,2016,2016066,Made In Denmark,HimmerLand," Farsø, Denmark",/european-tour/made-in-denmark-2016/
-euro,2016,2016068,Omega European Masters,Crans-sur-Sierre GC," Crans Montana, Switzerland",/european-tour/omega-european-masters-2016/
-euro,2016,2016070,KLM Open,The Dutch," Spijk, Netherlands",/european-tour/klm-open-2016/
-euro,2016,2016072,Italian Open,Golf Club Milano," Parco Reale di Monza, Italy",/european-tour/italian-open-2016/
-euro,2016,2016074,Porsche European Open,Golf Resort Bad Griesbach," Bad Griesbach, Germany",/european-tour/porsche-european-open-2016/
-euro,2016,2016078,Alfred Dunhill Links Championship,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland",/european-tour/alfred-dunhill-links-championship-2016/
-euro,2016,2016094,Fiji International,Kingsbarns Golf Links," Kingsbarns, Scotland",/european-tour/fiji-international-2016/
-euro,2016,2016080,British Masters supported by Sky Sports,Carnoustie," Angus, Scotland",/european-tour/british-masters-supported-by-sky-sports-2016/
-euro,2016,2016082,Portugal Masters,Natadola Bay GC," Natadola, Fiji",/european-tour/portugal-masters-2016/
-euro,2016,2016086,Turkish Airlines Open,Dom Pedro Victoria Golf Course," Vilamoura, Portugal",/european-tour/turkish-airlines-open-2016/
-euro,2016,2016088,Nedbank Golf Challenge hosted by Gary Player,Sheshan International GC," Shanghai, China",/european-tour/nedbank-golf-challenge-hosted-by-gary-player-2016/
-euro,2016,2016090,"DP World Tour Championship, Dubai",Regnum Carya Golf & Spa Resort," Antalya, Turkey",/european-tour/dp-world-tour-championship-dubai-2016/
-euro,2016,2015094,Nedbank Golf Challenge,Kingston Heath GC," Melbourne, Australia",/european-tour/nedbank-golf-challenge-2015/
+tour,season,tournament_id,tournament_name,par,yards,course,location
+euro,2021,2021101,Abu Dhabi HSBC Championship,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2021,2021102,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2021,2021103,Saudi International powered by SoftBank Investment Advisers,,,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia"
+euro,2020,2020001,Alfred Dunhill Championship,,,Leopard Creek CC," Malelane, South Africa"
+euro,2020,2020002,AFRASIA BANK Mauritius Open,,,Heritage GC," Heritage Bel Ombre, Mauritius"
+euro,2020,2020003,Australian PGA Championship,,,RACV Royal Pines Resort," Gold Coast, Queensland, Australia"
+euro,2020,2020006,South African Open hosted by the City of Johannesburg,,,Randpark GC," Johannesburg, South Africa"
+euro,2020,2020008,Abu Dhabi HSBC Championship presented by EGA,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2020,2020010,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2020,2020012,Saudi International powered by SoftBank Investment Advisers,,,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia"
+euro,2020,2020014,ISPS Handa Vic Open,,,13th Beach GC," Geelong, Victoria, Australia"
+euro,2020,2020020,Oman Open,,,Al Mouj Golf," Muscat, Oman"
+euro,2020,2020022,Commercial Bank Qatar Masters,,,Education City GC," Doha, Qatar"
+euro,2020,2020731,Austrian Open,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+euro,2020,2020732,Euram Bank Open,,,GC Adamstal," Ramsau, Austria"
+euro,2020,2020066,Betfred British Masters hosted by Lee Westwood,,,Close House GC," Newcastle-upon-Tyne, England"
+euro,2020,2020004,Hero Open,,,Forest of Arden Marriott Hotel & Country Club," Birmingham, England"
+euro,2020,2020005,English Championship,,,Hanbury Manor Marriott Hotel & Country Club," Ware, Hertfordshire, England"
+euro,2020,2020007,Celtic Classic,,,The Celtic Manor Resort," City of Newport, Wales"
+euro,2020,2020009,ISPS HANDA Wales Open,,,The Celtic Manor Resort," City of Newport, Wales"
+euro,2020,2020011,ISPS HANDA UK Championship,,,The Belfry," Sutton Coldfield, England"
+euro,2020,2020038,Estrella Damm N.A. Andalucia Masters ,,,Real Club Valderrama," Sotogrande, Spain"
+euro,2020,2020090,Portugal Masters,,,Dom Pedro Victoria Golf Course," Vilamoura, Portugal"
+euro,2020,2020750,Open de Portugal at Royal Óbidos,,,Royal Óbidos Spa & Golf Resort," Vau Óbidos, Portugal"
+euro,2020,2020046,Dubai Duty Free Irish Open,,,Galgorm Castle Golf Club," Ballymena, Northern Ireland"
+euro,2020,2020060,Aberdeen Standard Investments Scottish Open,,,The Renaissance Club," North Berwick, Scotland"
+euro,2020,2020078,BMW PGA Championship,,,Wentworth Golf Club," Virginia Water, Surrey, England"
+euro,2020,2020102,Scottish Championship presented by AXA,,,Fairmont St Andrews," St Andrews, Fife, Scotland"
+euro,2020,2020086,Italian Open,,,Chervò Golf Club," San Vigilio di Pozzolengo, Brescia , Italy"
+euro,2020,2020100,Aphrodite Hills Cyprus Open,,,Aphrodite Hills Resort," Paphos, Cyprus"
+euro,2020,2020101,Aphrodite Hills Cyprus Showdown,,,Aphrodite Hills Resort," Paphos, Cyprus"
+euro,2020,2020103,Joburg Open,,,Randpark GC," Johannesburg, South Africa"
+euro,2020,2020104,Alfred Dunhill Championship,,,Leopard Creek CC," Malelane, South Africa"
+euro,2020,2020106,Golf in Dubai Championship presented by DP World,,,Jumeirah Golf Estates," Dubai, UAE"
+euro,2020,2020105,South African Open,,,Gary Player CC," Sun City, South Africa"
+euro,2020,2020098,"DP World Tour Championship, Dubai",,,Jumeirah Golf Estates," Dubai, UAE"
+euro,2019,2019000,Honma Hong Kong Open presented by Amundi,,,Hong Kong GC," Fanling, Hong Kong"
+euro,2019,2019003,Afrasia Bank Mauritius Open at Anahita,,,Four Seasons GC Mauritius at Anahita," Beau Champ, Mauritius"
+euro,2019,2019002,Australian PGA Championship,,,RACV Royal Pines Resort," Gold Coast, Queensland, Australia"
+euro,2019,2019004,South African Open hosted by the City of Johannesburg,,,Randpark GC," Johannesburg, South Africa"
+euro,2019,2019006,Alfred Dunhill Championship,,,Leopard Creek CC," Malelane, South Africa"
+euro,2019,2019010,Abu Dhabi HSBC Championship presented by EGA,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2019,2019012,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2019,2019014,Saudi International powered by SBIA,,,Royal Greens G&CC," King Abdullah Economic City, Saudi Arabia"
+euro,2019,2019016,ISPS Handa Vic Open,,,13th Beach GC," Geelong, Victoria, Australia"
+euro,2019,2019018,ISPS Handa World Super 6 Perth,,,Lake Karrinyup CC," Perth, Australia"
+euro,2019,2019022,Oman Open,,,Al Mouj Golf," Muscat, Oman"
+euro,2019,2019024,Commercial Bank Qatar Masters,,,Doha GC," Doha, Qatar"
+euro,2019,2019026,Magical Kenya Open presented by Absa,,,Karen Country Club," Nairobi, Kenya"
+euro,2019,2019028,Maybank Championship,,,Saujana G&CC," Kuala Lumpur, Malaysia"
+euro,2019,2019031,Hero Indian Open,,,DLF G&CC," New Delhi, India"
+euro,2019,2019038,Trophee Hassan II,,,Royal Golf Dar Es Salam," Rabat, Morocco"
+euro,2019,2019040,Volvo China Open,,,Genzon GC," Shenzhen, China"
+euro,2019,2019042,Betfred British Masters,,,Hillside Golf Club," Southport, England"
+euro,2019,2019046,Made in Denmark presented by FREJA,,,HimmerLand," Farsø, Denmark"
+euro,2019,2019048,Belgian Knockout,,,Rinkven International GC," Antwerp, Belgium"
+euro,2019,2019050,GolfSixes Cascais,,,Oitavos Dunes," Cascais, Portugal"
+euro,2019,2019054,BMW International Open,,,Golfclub München Eichenried," Munich, Germany"
+euro,2019,2019056,Estrella Damm N.A. Andalucía Masters hosted by the Sergio Garcia Foundation,,,Real Club Valderrama," Sotogrande, Spain"
+euro,2019,2019058,Dubai Duty Free Irish Open,,,Lahinch GC," Lahinch, Co. Clare, Ireland"
+euro,2019,2019060,Aberdeen Standard Investments Scottish Open,,,The Renaissance Club," North Berwick, Scotland"
+euro,2019,2019070,D+D Real Czech Masters,,,Albatross Golf Resort," Prague, Czech Republic"
+euro,2019,2019072,Scandinavian Invitation,,,Hills Golf & Sports Club," Gothenburg, Sweden"
+euro,2019,2019074,Omega European Masters,,,Crans-sur-Sierre GC," Crans Montana, Switzerland"
+euro,2019,2019076,Porsche European Open,,,Green Eagle Golf Courses," Hamburg, Germany"
+euro,2019,2019078,KLM Open,,,The International," Amsterdam, Netherlands"
+euro,2019,2019080,BMW PGA Championship,,,Wentworth Golf Club," Virginia Water, Surrey, England"
+euro,2019,2019082,Alfred Dunhill Links Championship,,,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland"
+euro,2019,2019084,Mutuactivos Open de España,,,Kingsbarns Golf Links," Kingsbarns, Scotland"
+euro,2019,2019086,Italian Open,,,Carnoustie," Angus, Scotland"
+euro,2019,2019088,Amundi Open de France,,,Club de Campo Villa de Madrid," Madrid, Spain"
+euro,2019,2019090,Portugal Masters,,,Olgiata GC," Rome, Italy"
+euro,2019,2019093,Turkish Airlines Open,,,Dom Pedro Victoria Golf Course," Vilamoura, Portugal"
+euro,2019,2019094,Nedbank Golf Challenge hosted by Gary Player,,,Sheshan International GC," Shanghai, China"
+euro,2019,2019095,"DP World Tour Championship, Dubai",,,The Montgomerie Maxx Royal," Antalya, Turkey"
+euro,2018,2017095,UBS Hong Kong Open,,,Hong Kong GC," Fanling, Hong Kong"
+euro,2018,2017097,AfrAsia Bank Mauritius Open,,,Heritage GC," Heritage Bel Ombre, Mauritius"
+euro,2018,2017096,Australian PGA Championship,,,RACV Royal Pines Resort," Gold Coast, Queensland, Australia"
+euro,2018,2017098,Joburg Open,,,Randpark GC," Johannesburg, South Africa"
+euro,2018,2018004,BMW SA Open hosted by the City of Ekurhuleni,,,Glendower GC," City of Ekurhuleni, Gauteng, South Africa"
+euro,2018,2018006,EURASIA CUP presented by DRB-HICOM,,,Glenmarie G & CC," Kuala Lumpur, Malaysia"
+euro,2018,2018008,Abu Dhabi HSBC Championship presented by EGA,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2018,2018010,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2018,2018012,Maybank Championship,,,Saujana G&CC," Kuala Lumpur, Malaysia"
+euro,2018,2018014,ISPS Handa World Super 6 Perth,,,Lake Karrinyup CC," Perth, Australia"
+euro,2018,2018016,NBO Oman Open,,,Al Mouj Golf," Muscat, Oman"
+euro,2018,2018018,Commercial Bank Qatar Masters,,,Doha GC," Doha, Qatar"
+euro,2018,2018021,Tshwane Open,,,Pretoria CC," Waterkloof, South Africa"
+euro,2018,2018022,Hero Indian Open,,,DLF G&CC," New Delhi, India"
+euro,2018,2018032,Open de España,,,Centro Nacional de Golf," Madrid, Spain"
+euro,2018,2018034,Trophee Hassan II,,,Royal Golf Dar Es Salam," Rabat, Morocco"
+euro,2018,2018036,Volvo China Open,,,Topwin Golf & CC," Beijing, China"
+euro,2018,2018038,GolfSixes,,,Centurion Club," St Albans, England"
+euro,2018,2018040,Rocco Forte Sicilian Open,,,Verdura GC," Agrigento, Sicily, Italy"
+euro,2018,2018042,Belgian Knockout,,,Rinkven International GC," Antwerp, Belgium"
+euro,2018,2018044,BMW PGA Championship,,,Wentworth Golf Club," Virginia Water, Surrey, England"
+euro,2018,2018046,Italian Open,,,Gardagolf CC," Brescia, Italy"
+euro,2018,2018048,Shot Clock Masters,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+euro,2018,2018052,BMW International Open,,,Golf Club Gut Laerchenhof," Pulheim, Germany"
+euro,2018,2018054,HNA Open de France,,,Le Golf National," Paris, France"
+euro,2018,2018056,Dubai Duty Free Irish Open hosted by the Rory Foundation,,,Ballyliffin GC," Co. Donegal, Ireland"
+euro,2018,2018058,Aberdeen Standard Investments Scottish Open,,,Gullane GC," Gullane, East Lothian, Scotland"
+euro,2018,2018062,Porsche European Open,,,Green Eagle Golf Courses," Hamburg, Germany"
+euro,2018,2018065,Fiji International presented by Fiji Airways,,,Natadola Bay GC," Natadola, Fiji"
+euro,2018,2018067,European Golf Team Championships,,,Gleneagles," Auchterarder, Perthshire, Scotland"
+euro,2018,2018068,Nordea Masters,,,Hills Golf & Sports Club," Gothenburg, Sweden"
+euro,2018,2018070,D+D Real Czech Masters,,,Albatross Golf Resort," Prague, Czech Republic"
+euro,2018,2018072,Made In Denmark,,,Silkeborg Ry GC," Aarhus, Denmark"
+euro,2018,2018074,Omega European Masters,,,Crans-sur-Sierre GC," Crans Montana, Switzerland"
+euro,2018,2018076,KLM Open,,,The Dutch," Spijk, Netherlands"
+euro,2018,2018078,Portugal Masters,,,Dom Pedro Victoria Golf Course," Vilamoura, Portugal"
+euro,2018,2018080,Alfred Dunhill Links Championship,,,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland"
+euro,2018,2018082,Sky Sports British Masters,,,Kingsbarns Golf Links," Kingsbarns, Scotland"
+euro,2018,2018084,Andalucia Valderrama Masters hosted by the Sergio Garcia Foundation,,,Carnoustie," Angus, Scotland"
+euro,2018,2018088,Turkish Airlines Open,,,Real Club Valderrama," Sotogrande, Spain"
+euro,2018,2018089,Nedbank Golf Challenge hosted by Gary Player,,,Sheshan International GC," Shanghai, China"
+euro,2018,2018090,"DP World Tour Championship, Dubai",,,Regnum Carya Golf & Spa Resort," Antalya, Turkey"
+euro,2018,2018091,2018 ISPS Handa Melbourne World Cup of Golf,,,Gary Player CC," Sun City, South Africa"
+euro,2017,2016096,Australian PGA Championship,,,RACV Royal Pines Resort," Gold Coast, Queensland, Australia"
+euro,2017,2016098,UBS Hong Kong Open,,,Hong Kong GC," Fanling, Hong Kong"
+euro,2017,2017002,BMW SA Open hosted by City of Ekurhuleni,,,Glendower GC," City of Ekurhuleni, Gauteng, South Africa"
+euro,2017,2017004,Abu Dhabi HSBC Championship,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2017,2017006,Commercial Bank Qatar Masters,,,Doha GC," Doha, Qatar"
+euro,2017,2017008,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2017,2017010,Maybank Championship,,,Saujana G&CC," Kuala Lumpur, Malaysia"
+euro,2017,2017012,ISPS HANDA World Super 6 Perth,,,Lake Karrinyup CC," Perth, Australia"
+euro,2017,2017014,Joburg Open,,,Royal Johannesburg & Kensington GC," Johannesburg, South Africa"
+euro,2017,2017018,Tshwane Open,,,Pretoria CC," Waterkloof, South Africa"
+euro,2017,2017020,Hero Indian Open,,,DLF G&CC," New Delhi, India"
+euro,2017,2017030,Trophee Hassan II,,,Royal Golf Dar Es Salam," Rabat, Morocco"
+euro,2017,2017032,Shenzhen International,,,Genzon GC," Shenzhen, China"
+euro,2017,2017034,Volvo China Open,,,Topwin Golf & CC," Beijing, China"
+euro,2017,2017038,Open de Portugal at Morgado Golf Resort,,,Morgado G&CC," Portimao, Portugal"
+euro,2017,2017040,"Rocco Forte Open - Verdura, Sicily",,,Verdura GC," Agrigento, Sicily, Italy"
+euro,2017,2017042,BMW PGA Championship,,,Wentworth Golf Club," Virginia Water, Surrey, England"
+euro,2017,2017044,Nordea Masters,,,Barsebäck G&CC," Malmö, Sweden"
+euro,2017,2017046,LYONESS OPEN powered by ORGANIC+,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+euro,2017,2017050,BMW International Open,,,Golfclub München Eichenried," Munich, Germany"
+euro,2017,2017052,HNA Open de France,,,Le Golf National," Paris, France"
+euro,2017,2017054,Dubai Duty Free Irish Open hosted by the Rory Foundation,,,Portstewart GC," Co. Derry / Co. Londonderry, Northern Ireland"
+euro,2017,2017056,Aberdeen Asset Management Scottish Open,,,Dundonald Links," Troon, Ayrshire, Scotland"
+euro,2017,2017060,Porsche European Open,,,Green Eagle Golf Courses," Hamburg, Germany"
+euro,2017,2017066,Saltire Energy Paul Lawrie Match Play,,,Golf Resort Bad Griesbach," Bad Griesbach, Germany"
+euro,2017,2017068,Fiji International,,,Natadola Bay GC," Natadola, Fiji"
+euro,2017,2017070,Made In Denmark,,,HimmerLand," Farsø, Denmark"
+euro,2017,2017072,D+D REAL Czech Masters,,,Albatross Golf Resort," Prague, Czech Republic"
+euro,2017,2017074,Omega European Masters,,,Crans-sur-Sierre GC," Crans Montana, Switzerland"
+euro,2017,2017076,KLM Open,,,The Dutch," Spijk, Netherlands"
+euro,2017,2017078,Portugal Masters,,,Dom Pedro Victoria Golf Course," Vilamoura, Portugal"
+euro,2017,2017080,British Masters supported by Sky Sports,,,Close House GC," Newcastle-upon-Tyne, England"
+euro,2017,2017082,Alfred Dunhill Links Championship,,,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland"
+euro,2017,2017084,Italian Open,,,Kingsbarns Golf Links," Kingsbarns, Scotland"
+euro,2017,2017086,Andalucia Valderrama Masters hosted by the Sergio Garcia Foundation,,,Carnoustie," Angus, Scotland"
+euro,2017,2017090,Turkish Airlines Open,,,Real Club Valderrama," Sotogrande, Spain"
+euro,2017,2017092,Nedbank Golf Challenge hosted by Gary Player,,,Sheshan International GC," Shanghai, China"
+euro,2017,2017094,"DP World Tour Championship, Dubai",,,Regnum Carya Golf & Spa Resort," Antalya, Turkey"
+euro,2016,2015092,Alfred Dunhill Championship,,,Leopard Creek CC," Malelane, South Africa"
+euro,2016,2015095,Australian PGA Championship,,,RACV Royal Pines Resort," Gold Coast, Queensland, Australia"
+euro,2016,2016000,BMW SA Open hosted by City of Ekurhuleni,,,Glendower GC," City of Ekurhuleni, Gauteng, South Africa"
+euro,2016,2016002,Joburg Open,,,Royal Johannesburg & Kensington GC," Johannesburg, South Africa"
+euro,2016,2016003,EURASIA CUP presented by DRB-HICOM,,,Glenmarie G & CC," Kuala Lumpur, Malaysia"
+euro,2016,2016004,Abu Dhabi HSBC Golf Championship,,,Abu Dhabi GC," Abu Dhabi, UAE"
+euro,2016,2016006,Commercial Bank Qatar Masters,,,Doha GC," Doha, Qatar"
+euro,2016,2016008,Omega Dubai Desert Classic,,,Emirates GC," Dubai, UAE"
+euro,2016,2016010,Tshwane Open,,,Pretoria CC," Waterkloof, South Africa"
+euro,2016,2016012,Maybank Championship Malaysia,,,Royal Selangor GC," Kuala Lumpur, Malaysia"
+euro,2016,2016014,ISPS HANDA Perth International,,,Lake Karrinyup CC," Perth, Australia"
+euro,2016,2016018,True Thailand Classic presented by Chang,,,Black Mountain GC," Hua Hin, Thailand"
+euro,2016,2016020,Hero Indian Open,,,Delhi GC," New Delhi, India"
+euro,2016,2016028,"Real Club Valderrama Open de España, hosted by the Sergio Garcia Foundation",,,Real Club Valderrama," Sotogrande, Spain"
+euro,2016,2016030,Shenzhen International,,,Genzon GC," Shenzhen, China"
+euro,2016,2016032,Volvo China Open,,,Topwin Golf & CC," Beijing, China"
+euro,2016,2016034,Trophée Hassan II,,,Royal Golf Dar Es Salam," Rabat, Morocco"
+euro,2016,2016036,AfrAsia Bank Mauritius Open,,,Four Seasons GC Mauritius at Anahita," Beau Champ, Mauritius"
+euro,2016,2016038,Dubai Duty Free Irish Open hosted by the Rory Foundation,,,The K Club," Straffan, Co. Kildare, Ireland"
+euro,2016,2016040,BMW PGA Championship,,,Wentworth Golf Club," Virginia Water, Surrey, England"
+euro,2016,2016042,Nordea Masters,,,Bro Hof Slott GC," Stockholm, Sweden"
+euro,2016,2016044,Lyoness Open powered by Sporthilfe Cashback Card,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+euro,2016,2016048,BMW International Open,,,Golf Club Gut Lärchenhof," Cologne, Germany"
+euro,2016,2016050,100th Open de France,,,Le Golf National," Paris, France"
+euro,2016,2016052,Aberdeen Asset Management Scottish Open,,,Castle Stuart Golf Links," Inverness, Scotland"
+euro,2016,2016056,King’s Cup presented by PTT Group,,,Phoenix Gold Golf Club," Pattaya, Thailand"
+euro,2016,2016060,Aberdeen Asset Management Paul Lawrie Match Play,,,Archerfield," East Lothian, Scotland"
+euro,2016,2016062,Olympic Men's Golf Competition,,,Olympic Golf Course," Rio de Janeiro, Brazil"
+euro,2016,2016064,D+D REAL Czech Masters,,,Albatross Golf Resort," Prague, Czech Republic"
+euro,2016,2016066,Made In Denmark,,,HimmerLand," Farsø, Denmark"
+euro,2016,2016068,Omega European Masters,,,Crans-sur-Sierre GC," Crans Montana, Switzerland"
+euro,2016,2016070,KLM Open,,,The Dutch," Spijk, Netherlands"
+euro,2016,2016072,Italian Open,,,Golf Club Milano," Parco Reale di Monza, Italy"
+euro,2016,2016074,Porsche European Open,,,Golf Resort Bad Griesbach," Bad Griesbach, Germany"
+euro,2016,2016078,Alfred Dunhill Links Championship,,,Old Course St. Andrews," Carnoustie & Kingsbarns, Scotland"
+euro,2016,2016094,Fiji International,,,Kingsbarns Golf Links," Kingsbarns, Scotland"
+euro,2016,2016080,British Masters supported by Sky Sports,,,Carnoustie," Angus, Scotland"
+euro,2016,2016082,Portugal Masters,,,Natadola Bay GC," Natadola, Fiji"
+euro,2016,2016086,Turkish Airlines Open,,,Dom Pedro Victoria Golf Course," Vilamoura, Portugal"
+euro,2016,2016088,Nedbank Golf Challenge hosted by Gary Player,,,Sheshan International GC," Shanghai, China"
+euro,2016,2016090,"DP World Tour Championship, Dubai",,,Regnum Carya Golf & Spa Resort," Antalya, Turkey"
+euro,2016,2015094,Nedbank Golf Challenge,,,Kingston Heath GC," Melbourne, Australia"
+ct,2020,2020706,Limpopo Championship,,,Euphoria GC," Modimolle, South Africa"
+ct,2020,2020708,RAM Cape Town Open,,,Royal Cape GC," Cape Town, South Africa"
+ct,2020,2020710,Dimension Data Pro-Am,,,Fancourt Golf Estate," George, South Africa"
+ct,2020,2020731,Austrian Open,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+ct,2020,2020732,Euram Bank Open,,,GC Adamstal," Ramsau, Austria"
+ct,2020,2020300,Northern Ireland Open supported by The R&A,,,Galgorm Castle Golf Club," Ballymena, Northern Ireland"
+ct,2020,2020750,Open de Portugal at Royal Óbidos,,,Royal Óbidos Spa & Golf Resort," Vau Óbidos, Portugal"
+ct,2020,2020726,Italian Challenge Open Eneos Motor Oil,,,Golf Club Castelconturbia," Agrate Conturbia, Italy"
+ct,2020,2020301,Andalucía Challenge de España,,,Iberostar Real Club de Golf Novo Sancti Petri," Cadiz, Spain"
+ct,2020,2020302,Andalucía Challenge de Cádiz,,,Iberostar Real Club de Golf Novo Sancti Petri," Cadiz, Spain"
+ct,2020,2020762,Challenge Tour Grand Final,,,T-Golf & Country Club," Mallorca, Baleares, Spain"
+ct,2019,2019810,Jordan Mixed Open Presented By Ayla,,,Ayla Golf Club," Aqaba, Jordan"
+ct,2019,2019732,Turkish Airlines Challenge,,,Samsun GC," Atakum, Samsun, Turkey"
+ct,2019,2019728,Challenge de España,,,Izki Golf," Urturi, Alava Province, Spain"
+ct,2019,2019730,Prague Golf Challenge,,,Prague City Golf," Prague, Czech Republic"
+ct,2019,2019734,D+D REAL Czech Challenge,,,Kaskáda Golf Resort," Brno, Czech Republic"
+ct,2019,2019738,Swiss Challenge Presented by Swiss Golf,,,Golf Sempach," Lucerne, Switzerland"
+ct,2019,2019740,Hauts de France - Pas de Calais Golf Open,,,Aa Saint-Omer GC," Lumbres, France"
+ct,2019,2019744,Italian Challenge Open Eneos Motor Oil,,,Terre Dei Consoli Golf Club," Monterosi, Italy"
+ct,2019,2019746,D+D REAL Slovakia Challenge,,,Penati Golf Resort," Senica, Slovakia"
+ct,2019,2019748,Le Vaudreuil Golf Challenge,,,Golf PGA France du Vaudreuil," Le Vaudreuil, France"
+ct,2019,2019750,Euram Bank Open,,,GC Adamstal," Ramsau, Austria"
+ct,2019,2019754,Vierumäki Finnish Challenge,,,Vierumäki Resort," Vierumäki, Finland"
+ct,2019,2019756,Made in Denmark Challenge - Presented by FREJA,,,Silkeborg Ry Golfklub (Ry Course)," Skanderborg, Denmark"
+ct,2019,2019758,"ISPS Handa World Invitational Men | Women, Presented by Modest! Golf Management",,,Silkeborg Ry Golfklub (Ry Course)," Skanderborg, Denmark"
+ct,2019,2019760,Rolex Trophy,,,Golf Club de Genève," Genève, Switzerland"
+ct,2019,2019762,KPMG Trophy,,,Millennium Golf," Paal, Beringen, Belgium"
+ct,2019,2019764,Open de Bretagne,,,Golf Bluegreen de Pléneuf Val André," Pléneuf, France"
+ct,2019,2019766,57º OPEN DE PORTUGAL @ MORGADO GOLF RESORT,,,Morgado G&CC," Portimao, Portugal"
+ct,2019,2019770,Hopps Open de Provence,,,Golf International de Pont Royal," Mallemort, France"
+ct,2019,2019772,Lalla Aïcha Challenge Tour,,,Royal Golf Dar Es Salam," Rabat, Morocco"
+ct,2019,2019774,Stone Irish Challenge,,,Headfort Golf Club," Kells, Co. Meath, Ireland"
+ct,2019,2019776,Hainan Open,,,Sanya Luhuitou GC," Donghai Bay, Sanya, Hainan Island, China"
+ct,2019,2019778,Foshan Open,,,Foshan GC," Guangdong, China"
+ct,2019,2019780,Challenge Tour Grand Final,,,Challenge Tour Grand Final,NA
+ct,2018,2018710,Barclays Kenya Open,,,Muthaiga GC," Nairobi, Kenya"
+ct,2018,2018714,Belt & Road Colorful Yunnan Open 2018,,,Kunming Yulongwan Golf Club," Kunming, Yunnan Province, China"
+ct,2018,2018718,Turkish Airlines Challenge,,,Gloria GC," Belek, Antalya, Turkey"
+ct,2018,2018720,Challenge de España,,,Izki Golf," Urturi, Alava Province, Spain"
+ct,2018,2018724,56º Open de Portugal @ Morgado Golf Resort,,,Morgado G&CC," Portimao, Portugal"
+ct,2018,2018040,Rocco Forte Sicilian Open,,,Verdura GC," Agrigento, Sicily, Italy"
+ct,2018,2018042,Belgian Knockout,,,Rinkven International GC," Antwerp, Belgium"
+ct,2018,2018728,D+D REAL Czech  Challenge,,,Golf & Spa Kunětická Hora," Dříteč, Czech Republic"
+ct,2018,2018730,Swiss Challenge presented by Association Suisse de Golf,,,Golf Sempach," Lucerne, Switzerland"
+ct,2018,2018048,Shot Clock Masters,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+ct,2018,2018732,KPMG Trophy,,,L'Empereur G&CC," Ways, Genappe, Belgium"
+ct,2018,2018734,Hauts de France Golf Open,,,Aa Saint-Omer GC," Lumbres, France"
+ct,2018,2018736,SSE Scottish Hydro Challenge hosted by Macdonald Hotels & Resorts,,,Macdonald Spey Valley GC," Aviemore, Scotland"
+ct,2018,2018738,Made in Denmark Challenge presented by Ejner Hessel,,,HimmerLand," Farsø, Denmark"
+ct,2018,2018740,Prague Golf Challenge,,,Prague City Golf," Prague, Czech Republic"
+ct,2018,2018742,Italian Challenge presented by Cashback World,,,Is Molas Resort," Sardinia, Italy"
+ct,2018,2018744,Le Vaudreuil Golf Challenge,,,Golf PGA France du Vaudreuil," Le Vaudreuil, France"
+ct,2018,2018746,Euram Bank Open,,,GC Adamstal," Ramsau, Austria"
+ct,2018,2018748,Swedish Challenge hosted by Robert Karlsson,,,Katrineholms GK," Katrineholm, Sweden"
+ct,2018,2018750,Vierumäki Finnish Challenge,,,Vierumäki Resort," Vierumäki, Finland"
+ct,2018,2018752,"Galgorm Resort & Spa Northern Ireland Open, presented by Modest! Golf",,,Galgorm Castle," Galgorm, Ballymena, Northern Ireland"
+ct,2018,2018754,Rolex Trophy,,,Golf Club de Genève," Genève, Switzerland"
+ct,2018,2018756,Cordon Golf Open,,,Golf Bluegreen de Pléneuf Val André," Pléneuf, France"
+ct,2018,2018758,Bridgestone Challenge,,,Luton Hoo Hotel," Golf & Spa, Luton, Bedfordshire, England"
+ct,2018,2018760,Kazakhstan Open presented by ERG,,,Zhailjau Golf Resort," Almaty, Kazakhstan"
+ct,2018,2018762,Hopps Open de Provence,,,Golf International de Pont Royal," Mallemort, France"
+ct,2018,2018768,Monaghan Irish Challenge,,,Concra Wood GC," Castleblayney, County Monaghan, Ireland"
+ct,2018,2018770,Hainan Open,,,Sanya Luhuitou Club," Sanya City, Hainan Province, China"
+ct,2018,2018772,Foshan Open,,,Foshan GC," Guangdong, China"
+ct,2018,2018776,Ras Al Khaimah Challenge Tour Grand Final,,,Al Hamra GC," Ras Al Khaimah, UAE"
+ct,2017,2017710,Barclays Kenya Open,,,Muthaiga GC," Nairobi, Kenya"
+ct,2017,2017718,Turkish Airlines Challenge,,,Gloria GC," Belek, Antalya, Turkey"
+ct,2017,2017728,Andalucía Costa del Sol Match Play 9,,,La Cala Resort," Andalucía, Spain"
+ct,2017,2017040,"Rocco Forte Open - Verdura, Sicily",,,Verdura GC," Agrigento, Sicily, Italy"
+ct,2017,2017726,D+D REAL Czech Challenge,,,Golf & Spa Kunětická Hora," Dříteč, Czech Republic"
+ct,2017,2017730,Swiss Challenge presented by ASG,,,Golf Sempach," Lucerne, Switzerland"
+ct,2017,2017046,LYONESS OPEN powered by ORGANIC+,,,Diamond CC," Atzenbrugg, near Vienna, Austria"
+ct,2017,2017732,KPMG Trophy,,,Royal Waterloo GC," Lasne, Belgium"
+ct,2017,2017734,Hauts de France Golf Open,,,Aa Saint-Omer GC," Lumbres, France"
+ct,2017,2017736,Made in Denmark Challenge  -  presented by Ejner Hessel,,,Royal Oak GC," Vejen/Kolding, Denmark"
+ct,2017,2017738,SSE Scottish Hydro Challenge hosted by Macdonald Hotels & Resorts,,,Macdonald Spey Valley GC," Aviemore, Scotland"
+ct,2017,2017740,Prague Golf Challenge,,,Prague City Golf," Prague, Czech Republic"
+ct,2017,2017742,Italian Challenge Open by Lyoness,,,Is Molas Resort," Sardinia, Italy"
+ct,2017,2017744,Le Vaudreuil Golf Challenge,,,Golf PGA France du Vaudreuil," Le Vaudreuil, France"
+ct,2017,2017746,Swedish Challenge hosted by Robert Karlsson,,,Katrineholms GK," Katrineholm, Sweden"
+ct,2017,2017748,Vierumäki Finnish Challenge,,,Vierumäki Resort," Vierumäki, Finland"
+ct,2017,2017750,Galgorm Resort & Spa Northern Ireland Open presented by Modest! Golf,,,Galgorm Castle," Galgorm, Ballymena, Northern Ireland"
+ct,2017,2017752,Viking Challenge,,,Miklagard Golf Club," Kløfta, Norway"
+ct,2017,2017754,Rolex Trophy,,,Golf Club de Genève," Genève, Switzerland"
+ct,2017,2017072,D+D REAL Czech Masters,,,Albatross Golf Resort," Prague, Czech Republic"
+ct,2017,2017756,Cordon Golf Open,,,Golf Bluegreen de Pléneuf Val André," Pléneuf, France"
+ct,2017,2017758,Bridgestone Challenge,,,Luton Hoo Hotel," Golf & Spa, Luton, Bedfordshire, England"
+ct,2017,2017760,Irish Challenge hosted by Mount Wolseley Hotel Spa and Golf Resort,,,Mount Wolseley Hotel Spa and Golf Resort," Carlow, Ireland"
+ct,2017,2017764,Kazakhstan Open,,,Nurtau GC," Almaty, Kazakhstan"
+ct,2017,2017762,Challenge de España,,,Izki Golf," Urturi, Alava Province, Spain"
+ct,2017,2017768,Hainan Open,,,Sanya Luhuitou GC," Donghai Bay, Sanya, Hainan Island, China"
+ct,2017,2017770,The Foshan Open,,,Foshan GC," Guangdong, China"
+ct,2017,2017772,"Ras Al Khaimah, 2017 Golf Challenge",,,Al Hamra GC," Ras Al Khaimah, UAE"
+ct,2017,2017774,NBO Golf Classic Grand Final,,,Al Mouj Golf," Muscat, Oman"
+ct,2016,2016710,Barclays Kenya Open,,,Karen Country Club," Nairobi, Kenya"
+ct,2016,2016720,Red Sea Egyptian Challenge presented by Hassan Allam Properties,,,Sokhna GC," Ain Sokhna, Suez, Egypt"
+ct,2016,2016722,Challenge de Madrid,,,Real Club de Golf La Herrería," Madrid, Spain"
+ct,2016,2016724,Turkish Airlines Challenge,,,Gloria GC," Belek, Antalya, Turkey"
+ct,2016,2016726,Montecchia Open by Lyoness,,,Golf della Montecchia," Padova, Italy"
+ct,2016,2016730,D+D REAL Czech Challenge,,,Golf & Spa Kunětická Hora," Dříteč, Czech Republic"
+ct,2016,2016732,Swiss Challenge presented by Association Suisse de Golf,,,Golf Sempach," Lucerne, Switzerland"
+ct,2016,2016734,KPMG Trophy,,,Cleydael G&CC," Aartselaar, Belgium"
+ct,2016,2016736,Najeti Open,,,Aa Saint-Omer GC," Lumbres, France"
+ct,2016,2016738,SSE Scottish Hydro Challenge hosted by Macdonald Hotels and Resorts,,,Macdonald Spey Valley GC," Aviemore, Scotland"
+ct,2016,2016740,Made in Denmark Challenge – presented by Ejner Hessel,,,Aalborg GK," Aalborg, Denmark"
+ct,2016,2016742,D+D REAL Slovakia Challenge,,,Penati Golf Resort," Senica, Slovakia"
+ct,2016,2016744,Fred Olsen Challenge de España,,,Tecina Golf," La Gomera, Canary Islands, Spain"
+ct,2016,2016746,Le Vaudreuil Golf Challenge,,,Golf PGA France du Vaudreuil," Le Vaudreuil, France"
+ct,2016,2016748,Tayto Northern Ireland Open in Partnership with Ulster Bank,,,Galgorm Castle," Galgorm, Ballymena, Northern Ireland"
+ct,2016,2016750,Swedish Challenge hosted by Robert Karlsson,,,Katrineholms GK," Katrineholm, Sweden"
+ct,2016,2016752,Vierumäki Finnish Challenge,,,Vierumäki Resort," Vierumäki, Finland"
+ct,2016,2016754,Rolex Trophy,,,Golf Club de Genève," Genève, Switzerland"
+ct,2016,2016756,Bridgestone Challenge,,,Heythrop Park Resort," Enstone, Oxfordshire, England"
+ct,2016,2016758,Cordon Golf Open,,,Golf Bluegreen de Pléneuf Val André," Pléneuf, France"
+ct,2016,2016760,Volopa Irish Challenge hosted by Mount Wolseley Hotel Spa and Golf Resort,,,Mount Wolseley Hotel Spa and Golf Resort," Carlow, Ireland"
+ct,2016,2016766,Kazakhstan Open,,,Zhailjau Golf Resort," Almaty, Kazakhstan"
+ct,2016,2016768,Terre dei Consoli Open,,,Terre Dei Consoli Golf Club," Monterosi, Italy"
+ct,2016,2016770,Hainan Open,,,Sanya Luhuitou GC," Donghai Bay, Sanya, Hainan Island, China"
+ct,2016,2016772,Foshan Open,,,Foshan GC," Guangdong, China"
+ct,2016,2016774,"Ras Al Khaimah, 2016 Golf Challenge",,,Al Hamra GC," Ras Al Khaimah, UAE"
+ct,2016,2016776,NBO Golf Classic Grand Final,,,Al Mouj Golf," Muscat, Oman"

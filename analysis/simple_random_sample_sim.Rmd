@@ -1,0 +1,167 @@
+---
+title: "simple_random_sample_sim"
+author: "Jarrod Pelkofer"
+date: "3/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(DataExplorer)
+library(plotly)
+
+plan(multisession, workers = 4)
+
+source(file = "simulation_scripts/simple_random_sample_sim_script.R")
+
+theme_set(theme_minimal())
+
+dk_past_results <- 
+  read_csv("dk_past_results.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(date = mdy(date)) %>% 
+  filter(date %>% between(left = ymd("2019-01-13"), right = ymd("2019-08-25")))
+
+
+```
+
+
+```{r}
+tournaments_to_sim <- 
+  dk_past_results %>% 
+  select(tournament_id, date) %>% 
+  mutate(date = date - days(4)) %>% 
+  distinct()
+```
+
+# Pull tournament to sim
+```{r}
+
+tournament_ids <- 
+  tournaments_to_sim %>% 
+  pull(tournament_id)
+
+tournament_dates <- 
+  tournaments_to_sim %>% 
+  pull(date)
+
+get_tournament_players <- function(df, tid) {
+  
+  df %>%
+    filter(tournament_id %in% c(tid)) %>%
+    pull(player)
+  
+}
+
+tournament_players_tbl <-
+  map(tournament_ids, ~ get_tournament_players(dk_past_results, .x)) %>% 
+  enframe(value = "players") %>% 
+  bind_cols(tournament_id = tournament_ids, date = tournament_dates) %>% 
+  unnest(players) %>% 
+  nest(-name)
+
+
+
+```
+
+
+# Run Simulations
+
+```{r}
+simple_sims_summarized <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x), otherwise = NA))
+
+simple_sims_tbl <- 
+  simple_sims_summarized %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+```
+
+
+# Sims vs. Actual
+```{r}
+
+sims_with_actual_tbl <- 
+  simple_sims_tbl %>%
+  left_join(
+    select(
+      dk_past_results,
+      player,
+      tournament_id,
+      final_position,
+      dk_total_fp
+    ),
+    by = c("tournament_id",
+      "player_name" = "player")
+  )
+
+write_csv(sims_with_actual_tbl, "simple_sim_results.csv")
+
+```
+
+# Analyzing Results
+```{r}
+sims_with_actual_tbl <- read_csv("simple_sim_results.csv")
+
+# Avg Sim DK Points vs Actual DK Point Totals
+sims_with_actual_tbl %>% 
+  ggplot(aes(avg_dk_points, dk_total_fp)) +
+  geom_point()
+
+# Evaluating Top 20 Prob
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, 80, 90)
+top_20_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "70%-80%", "Over 80%")
+
+top_20_dk_tbl <- 
+  sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels)) %>% 
+  select(top_20_prediction_range, actual_top_20_dk_finish)
+
+top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 5 Prob
+top_5_bins <-  c(-Inf, 5, 10, 15, 20, 25, 30, 35)
+top_5_labels <-  c("0%-5%", "5%-10%", "10%-15%", "15%-20%", "20%-25%", "25%-30%", "30%-35%")
+
+top_5_dk_tbl <- 
+  sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_5_dk_finish = ifelse(actual_dk_point_rk <= 5, 1, 0),
+         top_5_prediction_range = cut(top5_dk, breaks = top_5_bins, labels = top_5_labels)) %>%
+  select(top_5_prediction_range, actual_top_5_dk_finish)
+
+top_5_dk_tbl %>% 
+  group_by(top_5_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_5_dk_finishes = sum(actual_top_5_dk_finish)
+            ) %>% 
+  mutate(actual_top_5_percentage = top_5_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_5_prediction_range, actual_top_5_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .35, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+

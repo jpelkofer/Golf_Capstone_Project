@@ -2,7 +2,7 @@
 
 library(DataExplorer)
 
-source(file = "scripts/espn_data_scraping_and_wrangling_functions.R")
+source(file = "database/scripts/espn_data_scraping_and_wrangling_functions.R")
 
 plan(multisession, workers = 4)
 
@@ -196,3 +196,109 @@ tbl(con, "tournaments_tbl") %>%
   filter(tour %in% c("ntw"))
 
 dbDisconnect(con)
+
+# add euro/ct tournaments to database
+euro_tournaments_tbl <- 
+  read_csv("database/euro_tour_tournaments.csv")
+
+DBI::dbAppendTable(conn = con, "tournaments_tbl", euro_tournaments_tbl)
+
+# Fixing holes_tbl to add yardage ----
+
+tournaments_tbl <- tbl(con, "tournaments_tbl") %>% collect()
+
+# get pga and ntw holes
+tournament_holes <-
+  tournaments_tbl %>%
+  filter(tour %in% c("pga", "ntw")) %>%
+  select(tour, tournament_id) %>% 
+  future_pmap(purrr::possibly(scrape_hole_description_function, otherwise = NA)) %>%
+  enframe() %>%
+  filter(!is.na(value)) %>%
+  unnest(value) %>%
+  select(-name) %>% 
+  mutate(course_id = course_id %>% as.numeric())
+
+source(file = "database/scripts/euro_tour_data_scraping_and_wrangling_functions.R")
+
+# euro portion of getting holes, euro tour gives data for each round
+euro_rounds <- 
+  rep(1, 319) %>% 
+  append(rep(2,319)) %>% 
+  append(rep(3,319)) %>%
+  append(rep(4,319))
+
+
+euro_tournaments_rounds <- 
+  tournaments_tbl %>%
+  filter(tour %in% c("euro", "ct")) %>%
+  bind_rows(tournaments_tbl %>%
+              filter(tour %in% c("euro", "ct"))) %>% 
+  bind_rows(tournaments_tbl %>%
+              filter(tour %in% c("euro", "ct"))) %>%
+  bind_rows(tournaments_tbl %>%
+              filter(tour %in% c("euro", "ct"))) %>%
+  mutate(round = euro_rounds)
+
+# get euro and ct holes
+euro_tournament_holes <- 
+  euro_tournaments_rounds %>%
+  select(tournament_id, round) %>% 
+  future_pmap(purrr::possibly(scrape_euro_hole_description_function, otherwise = NA)) %>%
+  enframe() %>%
+  filter(!is.na(value)) %>%
+  unnest(value) %>%
+  select(-name) %>% 
+  mutate(course_id = course_id %>% as.numeric())
+
+holes_tbl <- 
+  tbl(con, "holes_tbl") %>% 
+  collect()
+
+
+# Fix PGA and NTW holes
+pga_holes_tbl <-
+  holes_tbl %>%
+  filter(tour %in% c("pga", "ntw")) %>%
+  left_join(
+    tournament_holes,
+    by = c("tournament_id",
+           "course_id",
+           "hole")
+  ) %>%
+  select(player_id:par, yards, score:fd_pts_gained_classic)
+
+plot_missing(pga_holes_tbl)
+
+# After examining missing values it is determined the ones that are missing is because data is not available
+pga_holes_tbl %>% 
+  filter(is.na(yards)) %>% 
+  View()
+
+# Fix Euro and CT holes
+euro_holes_tbl <-
+  holes_tbl %>%
+  filter(tour %in% c("euro", "ct")) %>%
+  left_join(
+    select(euro_tournament_holes, -par),
+    by = c("tournament_id",
+           "course_id",
+           "round",
+           "hole")
+  ) %>%
+  select(player_id:par, yards, score:fd_pts_gained_classic)
+
+plot_missing(euro_holes_tbl)
+
+# combine fixed holes tbl
+updated_holes_tbl <- 
+  pga_holes_tbl %>% 
+  bind_rows(euro_holes_tbl)
+
+plot_missing(updated_holes_tbl)
+
+# Update DB
+updated_holes_tbl %>% 
+  DBI::dbWriteTable(conn = con, "holes_tbl", ., field.types = c(date = "date"), overwrite = TRUE)
+
+

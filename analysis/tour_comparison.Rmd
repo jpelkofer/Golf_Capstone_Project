@@ -1,0 +1,79 @@
+---
+title: "tour_comparison"
+author: "Jarrod Pelkofer"
+date: "3/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(DBI)
+library(RPostgres)
+library(tidyverse)
+
+con <- dbConnect(drv = RPostgres::Postgres(), 
+                 user = "postgres", 
+                 password = keyring::key_get("postgres_db", "postgres"), 
+                 dbname = "golf_db")
+
+theme_set(theme_minimal())
+```
+
+# Grab Data from DB
+```{r}
+holes_summarised_tbl <- 
+  tbl(con, "holes_tbl") %>%
+  filter(season == 2019) %>% 
+  group_by(player_name, tour) %>% 
+  summarise(avg_strokes_gained_per_hole = strokes_gained_hole %>% mean(),
+            total_holes_played = n()) %>% 
+  collect()
+```
+
+# Tables Split by Tour
+```{r}
+pga_holes_summarised_tbl <- 
+  holes_summarised_tbl %>% 
+  ungroup() %>% 
+  filter(tour == "pga") %>% 
+  rename(avg_strokes_gained_per_hole_pga = avg_strokes_gained_per_hole)
+
+euro_holes_summarised_tbl <- 
+  holes_summarised_tbl %>% 
+  ungroup() %>% 
+  filter(tour == "euro") %>% 
+  rename(avg_strokes_gained_per_hole_euro = avg_strokes_gained_per_hole)
+
+ntw_holes_summarised_tbl <- 
+  holes_summarised_tbl %>% 
+  ungroup() %>% 
+  filter(tour == "ntw") %>% 
+  rename(avg_strokes_gained_per_hole_ntw = avg_strokes_gained_per_hole)
+
+ct_holes_summarised_tbl <- 
+  holes_summarised_tbl %>% 
+  ungroup() %>% 
+  filter(tour == "ct") %>% 
+  rename(avg_strokes_gained_per_hole_ct = avg_strokes_gained_per_hole)
+```
+
+
+```{r}
+pga_holes_summarised_tbl %>% 
+  inner_join(euro_holes_summarised_tbl, by = "player_name") %>% 
+  pivot_longer(cols = c(avg_strokes_gained_per_hole_pga, avg_strokes_gained_per_hole_euro), values_to = "avg_sg_per_hole") %>% 
+  select(-contains("total_holes"), -contains("tour")) %>% 
+  rename(tour = name) %>% 
+  mutate(tour = if_else(tour == "avg_strokes_gained_per_hole_pga", "pga", "euro")) %>% 
+  # group_by(tour) %>% 
+  # summarise(avg_sg = avg_sg_per_hole %>% mean()) %>% 
+  ungroup() %>% 
+  ggplot(aes(tour, avg_sg_per_hole)) + 
+  geom_jitter(width = .10) + 
+  labs(title = "Euro Tour Difficulty vs. PGA Tour Difficulty")
+```
+

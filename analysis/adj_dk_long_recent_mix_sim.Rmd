@@ -1,0 +1,662 @@
+---
+title: "adj_dk_points_gained_long_form_recent_form_mix"
+author: "Jarrod Pelkofer"
+date: "4/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load Libraries
+```{r}
+library(DBI)
+library(RPostgres)
+library(tidyverse)
+library(lubridate)
+library(tidymodels)
+library(furrr)
+library(plotly)
+
+plan(multisession, workers = 4)
+
+theme_set(theme_minimal())
+
+dk_past_results <- 
+  read_csv("dk_past_results.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(date = mdy(date)) %>% 
+  filter(date %>% between(left = ymd("2019-01-13"), right = ymd("2019-08-25")))
+```
+
+```{r}
+tournaments_to_sim <- 
+  dk_past_results %>% 
+  select(tournament_id, date) %>% 
+  mutate(date = date - days(4)) %>% 
+  distinct()
+```
+
+
+# Build Sim Functions
+```{r}
+adj_pts_gained_nested_tbl <-
+  adj_dk_pts_gained_tbl %>%
+  filter(!adj_dk_pts_gained %>% is.na()) %>%
+  select(player_name, adj_dk_pts_gained) %>%
+  nest(pts_gained = -player_name)
+
+df <- adj_pts_gained_nested_tbl %>%
+  head(1) %>%
+  unnest()
+
+
+get_player_sims <- function(sims, scores, n_samples) {
+  
+  # generates player simulations
+  
+  if (n_samples == 1) {
+    tibble(score_type = sample(scores, sims, replace = TRUE)) %>%
+      mutate(sim = str_glue("X{row_number()}") %>% as.character(),
+             .before = score_type)
+  } else if (n_samples > 1) {
+    data.frame(replicate(sims,
+                         sample(scores, n_samples, replace = TRUE))) %>%
+      pivot_longer(cols = everything(),
+                   names_to = "sim",
+                   values_to = "score_type")
+  }  else {
+    tibble(sim = character(),
+           score_type = character())
+  }
+  
+}
+
+# df <- adj_pts_gained_nested_tbl %>% 
+#   filter(player_name == "Austin Eckroat") %>% 
+#   unnest()
+
+player_adj_dk_gained_sim <- function(df, n = 5, holes = 18, hole_limit = 360, pts_penalty = .35) {
+  
+  num_of_holes <- 
+    df %>% 
+    count() %>% 
+    pull() %>% 
+    as.double()
+  
+  scores <-
+    df %>%
+    mutate(num_of_holes = num_of_holes) %>% 
+    mutate(adj_dk_pts_gained = if_else(num_of_holes >= hole_limit, adj_dk_pts_gained, adj_dk_pts_gained - pts_penalty)) %>% 
+    pull(adj_dk_pts_gained)
+  
+  rd_1_sims <- get_player_sims(sims = n, scores, holes)
+  rd_2_sims <- get_player_sims(sims = n, scores, holes)
+  rd_3_sims <- get_player_sims(sims = n, scores, holes)
+  rd_4_sims <- get_player_sims(sims = n, scores, holes)
+  
+  # Calculate rds1 and rds2 dk points gained
+  rds_1_and_2_tbl <-
+    bind_rows(rd_1_sims, rd_2_sims) %>%
+    group_by(sim) %>%
+    summarise(dk_pts_gained_rds_1_2 = sum(score_type))
+  
+  # Calculate rds3 and rds4 dk points gained
+  rds_3_and_4_tbl <-
+    bind_rows(rd_3_sims, rd_4_sims) %>%
+    group_by(sim) %>%
+    summarise(dk_pts_gained_rds_3_4 = sum(score_type))
+  
+  left_join(rds_1_and_2_tbl, rds_3_and_4_tbl)
+}
+
+player_adj_dk_gained_sim(df)
+```
+
+# Pull tournament to sim
+```{r}
+
+tournament_ids <- 
+  tournaments_to_sim %>% 
+  pull(tournament_id)
+
+tournament_dates <- 
+  tournaments_to_sim %>% 
+  pull(date)
+
+get_tournament_players <- function(df, tid) {
+  
+  df %>%
+    filter(tournament_id %in% c(tid)) %>%
+    pull(player)
+  
+}
+
+tournament_players_tbl <-
+  map(tournament_ids, ~ get_tournament_players(dk_past_results, .x)) %>% 
+  enframe(value = "players") %>% 
+  bind_cols(tournament_id = tournament_ids, date = tournament_dates) %>% 
+  unnest(players) %>% 
+  nest(-name)
+
+
+
+```
+
+# Run Simulations
+```{r}
+
+# df <- 
+#   tournament_players_tbl %>%
+#   head(1) %>%
+#   unnest(data)
+
+complete_simulation_framework <- function(df, recent_form_weight = .35) {
+  
+  plan(multisession, workers = 4)
+  
+  con <- dbConnect(drv = RPostgres::Postgres(), 
+                 user = "postgres", 
+                 password = keyring::key_get("postgres_db", "postgres"), 
+                 dbname = "golf_db",
+                 )
+  
+  tournament_players <-
+    df %>%
+    pull(players)
+  
+  end_date <- 
+    df %>%  
+    distinct(date) %>% 
+    pull(date)
+  
+  start_date <- end_date - days(365)
+  
+  recent_form_start_date <- end_date - days(90)
+  
+  tournament_id <-
+    df %>%
+    distinct(tournament_id) %>% 
+    pull(tournament_id)
+  
+  # pull in holes data
+  holes_tbl <- 
+  tbl(con, "holes_tbl") %>%
+  filter(round != 5) %>% 
+  mutate(player_name = case_when(
+    player_name == "Ali Al-Shahrani" ~ "Ali Al Shahrani",
+    TRUE ~ player_name
+  )) %>%
+  filter(date %>% between(left = start_date,
+                          right = end_date)) %>% 
+  select(player_name, date, season:course_id, round, hole, score_type, dk_pts_classic, field_dk_classic_avg, dk_pts_gained_classic) %>% 
+  collect()
+  
+  # calculate total dk pts gained by each player in tournament/round combo
+  dk_pts_gained_rd <-
+    holes_tbl %>%
+    unite("tournament_round_id", c(tournament_id:round)) %>%
+    group_by(player_name, tournament_round_id) %>%
+    summarise(total_dk_pts_gained = sum(dk_pts_gained_classic)) %>%
+    ungroup() %>%
+    # lumping players together that have played less than 25 rounds in past year
+    mutate(player_name = fct_lump_min(player_name, 25)) %>%
+    # left_join(avg_dk_hole_score_by_tourney_rd_tbl) %>%
+    select(player_name, tournament_round_id, total_dk_pts_gained)
+  
+  # create dummy vars for all players and tournament/course/rd combo
+  course_rd_effect_recipe <-
+    recipe(~ ., data = dk_pts_gained_rd) %>%
+    step_dummy(all_nominal(), one_hot = TRUE)
+  
+  course_rd_effect_data <-
+    course_rd_effect_recipe %>% prep() %>% bake(new_data = NULL)
+  
+  # run course/field effects model
+  course_rd_effect_model <-
+    lm(total_dk_pts_gained ~ . , data = course_rd_effect_data)
+  
+  course_round_effect_tbl <-
+    tidy(course_rd_effect_model) %>%
+    filter(term %>% str_detect("tournament_round_id")) %>%
+    arrange(estimate) %>%
+    mutate(term = term %>% str_sub(22,-1)) %>%
+    select(tournament_round_id = term, course_rd_effect = estimate) %>%
+    mutate(course_rd_effect_per_hole = course_rd_effect / 18)
+  
+  #join holes data with course effects data, calculate adjusted dk points gained
+  adj_dk_pts_gained_tbl <-
+    holes_tbl %>%
+    filter(player_name %in% c(tournament_players)) %>%
+    unite("tournament_round_id", c(tournament_id:round)) %>%
+    left_join(course_round_effect_tbl, by = "tournament_round_id") %>%
+    mutate(adj_dk_pts_gained = (dk_pts_gained_classic - course_rd_effect_per_hole)) %>%
+    filter(!adj_dk_pts_gained %>% is.na()) %>%
+    select(player_name, date, adj_dk_pts_gained) 
+  
+  # long term
+  adj_pts_gained_nested_tbl_long_term <-
+    adj_dk_pts_gained_tbl %>%
+    filter(player_name %in% c(tournament_players)) %>%
+    select(-date) %>% 
+    nest(pts_gained = -player_name)
+  
+  # run simulations for tournament, long term data
+  tournament_sims_long_term <-
+    adj_pts_gained_nested_tbl_long_term %>%
+    pull(pts_gained) %>%
+    future_map(purrr::possibly(~ player_adj_dk_gained_sim(.x, n = 10000), otherwise = NA)) %>%
+    enframe() %>%
+    bind_cols(select(adj_pts_gained_nested_tbl_long_term, player_name)) %>% 
+    unnest(value) %>% 
+    rename(long_term_rds_1_2 = dk_pts_gained_rds_1_2,
+           long_term_rds_3_4 = dk_pts_gained_rds_3_4)
+  
+  # recent form
+  adj_pts_gained_nested_tbl_recent_form <-
+    adj_dk_pts_gained_tbl %>%
+    filter(player_name %in% c(tournament_players)) %>%
+    filter(date %>% between(left = recent_form_start_date, right = end_date)) %>% 
+    select(-date) %>% 
+    nest(pts_gained = -player_name)
+  
+  # run simulations for tournament, recent form data
+  tournament_sims_recent_form <-
+    adj_pts_gained_nested_tbl_recent_form %>%
+    pull(pts_gained) %>%
+    future_map(purrr::possibly(~ player_adj_dk_gained_sim(.x, n = 10000, hole_limit = 100), otherwise = NA)) %>%
+    enframe() %>%
+    bind_cols(select(adj_pts_gained_nested_tbl_recent_form, player_name)) %>% 
+    unnest(value) %>% 
+    rename(recent_form_rds_1_2 = dk_pts_gained_rds_1_2,
+           recent_form_rds_3_4 = dk_pts_gained_rds_3_4)
+  
+  tournament_sims <- 
+    tournament_sims_long_term %>%
+    select(-name) %>% 
+    left_join(select(tournament_sims_recent_form, -name), by = c("sim", "player_name")) %>% 
+    mutate(recent_form_rds_1_2 = if_else(is.na(recent_form_rds_1_2), long_term_rds_1_2, recent_form_rds_1_2),
+           recent_form_rds_3_4 = if_else(is.na(recent_form_rds_3_4), long_term_rds_3_4, recent_form_rds_3_4)) %>%
+    mutate(dk_pts_gained_rds_1_2 = (long_term_rds_1_2 * (1-recent_form_weight)) + (recent_form_rds_1_2 * recent_form_weight),
+           dk_pts_gained_rds_3_4 = (long_term_rds_3_4 * (1-recent_form_weight)) + (recent_form_rds_3_4 * recent_form_weight)) %>% 
+    group_by(sim) %>%
+    mutate(rd_1_and_2_rank = min_rank(-dk_pts_gained_rds_1_2)) %>%
+    ungroup() %>%
+    mutate(dk_pts_gained_rds_3_4 = if_else(rd_1_and_2_rank > 65, 0, dk_pts_gained_rds_3_4)) %>%
+    mutate(dk_total_pts_gained = dk_pts_gained_rds_1_2 + dk_pts_gained_rds_3_4) %>%
+    group_by(sim) %>%
+    mutate(dk_pts_rank = min_rank(-dk_total_pts_gained)) %>%
+    ungroup()
+  
+  # Sims Summarized
+  tournament_sims %>%
+    group_by(player_name) %>%
+    summarise(
+      avg_dk_pts_gained = mean(dk_total_pts_gained),
+      win_dk = sum(dk_pts_rank == 1) / 10000 * 100,
+      top5_dk = sum(dk_pts_rank <= 5) / 10000 * 100,
+      top10_dk = sum(dk_pts_rank <= 10) / 10000 * 100,
+      top20_dk = sum(dk_pts_rank <= 20) / 10000 * 100
+    ) %>%
+    arrange(desc(top20_dk)) %>%
+    ungroup() %>%
+    mutate(tournament_id = tournament_id)
+  
+}
+```
+
+
+```{r}
+adj_dk_long_recent_35perc_sim <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x), otherwise = NA))
+
+adj_dk_long_recent_35perc_sims_tbl <- 
+  adj_dk_long_recent_35perc_sim %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+```
+
+```{r}
+# Sims vs. Actual
+
+adj_dk_long_recent_35perc_sims_with_actual_tbl <- 
+  adj_dk_long_recent_35perc_sims_tbl %>%
+  left_join(
+    select(
+      dk_past_results,
+      player,
+      tournament_id,
+      final_position,
+      dk_total_fp
+    ),
+    by = c("tournament_id",
+      "player_name" = "player")
+  )
+
+write_csv(adj_dk_long_recent_35perc_sims_with_actual_tbl, "adj_dk_long_recent_35perc_sims_with_actual_tbl.csv")
+
+```
+
+# Analyzing Results
+```{r}
+
+adj_dk_long_recent_35perc_sims_with_actual_tbl <- read_csv("adj_dk_long_recent_35perc_sims_with_actual_tbl.csv") %>% 
+  drop_na() %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position)) %>% 
+  distinct()
+
+
+# Evaluating Top 20 Prob
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, 80, Inf)
+
+top_20_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "70%-80%", "Over 80%")
+
+top_20_dk_tbl <- 
+  adj_dk_long_recent_35perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels)) %>% 
+  select(top_20_prediction_range, actual_top_20_dk_finish)
+
+top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 10 Prob
+top_10_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, Inf)
+top_10_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "Over 70%")
+
+top_10_dk_tbl <- 
+  adj_dk_long_recent_35perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top10_dk, breaks = top_10_bins, labels = top_10_labels)) %>%
+  select(top_10_prediction_range, actual_top_10_dk_finish)
+
+top_10_dk_tbl %>% 
+  group_by(top_10_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top_10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_10_prediction_range, actual_top_10_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .40, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 5 Prob
+top_5_bins <-  c(-Inf, 5, 10, 15, 20, 25, 30, Inf)
+top_5_labels <-  c("0%-5%", "5%-10%", "10%-15%", "15%-20%", "20%-25%", "25%-30%", "Over 30%")
+
+top_5_dk_tbl <- 
+  adj_dk_long_recent_35perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_5_dk_finish = ifelse(actual_dk_point_rk <= 5, 1, 0),
+         top_5_prediction_range = cut(top5_dk, breaks = top_5_bins, labels = top_5_labels)) %>%
+  select(top_5_prediction_range, actual_top_5_dk_finish)
+
+top_5_dk_tbl %>% 
+  group_by(top_5_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_5_dk_finishes = sum(actual_top_5_dk_finish)
+            ) %>% 
+  mutate(actual_top_5_percentage = top_5_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_5_prediction_range, actual_top_5_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .45, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+
+```{r}
+adj_dk_long_recent_25perc_sim <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x, recent_form_weight = .25), otherwise = NA))
+
+adj_dk_long_recent_25perc_sims_tbl <- 
+  adj_dk_long_recent_25perc_sim %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+```
+
+```{r}
+# Sims vs. Actual
+
+adj_dk_long_recent_25perc_sims_with_actual_tbl <- 
+  adj_dk_long_recent_25perc_sims_tbl %>%
+  left_join(
+    select(
+      dk_past_results,
+      player,
+      tournament_id,
+      final_position,
+      dk_total_fp
+    ),
+    by = c("tournament_id",
+      "player_name" = "player")
+  )
+
+write_csv(adj_dk_long_recent_25perc_sims_with_actual_tbl, "adj_dk_long_recent_25perc_sims_with_actual_tbl.csv")
+
+```
+
+# Analyzing Results
+```{r}
+
+adj_dk_long_recent_25perc_sims_with_actual_tbl <- read_csv("adj_dk_long_recent_25perc_sims_with_actual_tbl.csv") %>% 
+  drop_na() %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position)) %>% 
+  distinct()
+
+
+# Evaluating Top 20 Prob
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, 80, Inf)
+
+top_20_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "70%-80%", "Over 80%")
+
+top_20_dk_tbl <- 
+  adj_dk_long_recent_25perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels)) %>% 
+  select(top_20_prediction_range, actual_top_20_dk_finish)
+
+top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 10 Prob
+top_10_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, Inf)
+top_10_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "Over 70%")
+
+top_10_dk_tbl <- 
+  adj_dk_long_recent_25perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top10_dk, breaks = top_10_bins, labels = top_10_labels)) %>%
+  select(top_10_prediction_range, actual_top_10_dk_finish)
+
+top_10_dk_tbl %>% 
+  group_by(top_10_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top_10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_10_prediction_range, actual_top_10_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .80, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 5 Prob
+top_5_bins <-  c(-Inf, 5, 10, 15, 20, 25, 30, Inf)
+top_5_labels <-  c("0%-5%", "5%-10%", "10%-15%", "15%-20%", "20%-25%", "25%-30%", "Over 30%")
+
+top_5_dk_tbl <- 
+  adj_dk_long_recent_25perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_5_dk_finish = ifelse(actual_dk_point_rk <= 5, 1, 0),
+         top_5_prediction_range = cut(top5_dk, breaks = top_5_bins, labels = top_5_labels))
+
+top_5_dk_tbl %>% 
+  group_by(top_5_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_5_dk_finishes = sum(actual_top_5_dk_finish)
+            ) %>% 
+  mutate(actual_top_5_percentage = top_5_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_5_prediction_range, actual_top_5_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .45, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+
+```{r}
+adj_dk_long_recent_15perc_sim <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x, recent_form_weight = .15), otherwise = NA))
+
+adj_dk_long_recent_15perc_sims_tbl <- 
+  adj_dk_long_recent_15perc_sim %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+```
+
+```{r}
+# Sims vs. Actual
+
+adj_dk_long_recent_15perc_sims_with_actual_tbl <- 
+  adj_dk_long_recent_15perc_sims_tbl %>%
+  left_join(
+    select(
+      dk_past_results,
+      player,
+      tournament_id,
+      final_position,
+      dk_total_fp
+    ),
+    by = c("tournament_id",
+      "player_name" = "player")
+  )
+
+write_csv(adj_dk_long_recent_15perc_sims_with_actual_tbl, "adj_dk_long_recent_15perc_sims_with_actual_tbl.csv")
+
+```
+
+# Analyzing Results
+```{r}
+
+adj_dk_long_recent_15perc_sims_with_actual_tbl <- read_csv("adj_dk_long_recent_15perc_sims_with_actual_tbl.csv") %>% 
+  drop_na() %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position)) %>% 
+  distinct()
+
+
+# Evaluating Top 20 Prob
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, 80, Inf)
+
+top_20_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "70%-80%", "Over 80%")
+
+top_20_dk_tbl <- 
+  adj_dk_long_recent_15perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels))
+
+top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 10 Prob
+top_10_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, 70, Inf)
+top_10_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "60%-70%", "Over 70%")
+
+top_10_dk_tbl <- 
+  adj_dk_long_recent_15perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top10_dk, breaks = top_10_bins, labels = top_10_labels)) %>% 
+  select(top_10_prediction_range, actual_top_10_dk_finish)
+
+top_10_dk_tbl %>% 
+  group_by(top_10_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top_10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_10_prediction_range, actual_top_10_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .80, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+# Evaluating Top 5 Prob
+top_5_bins <-  c(-Inf, 5, 10, 15, 20, 25, 30, 35, 40, Inf)
+top_5_labels <-  c("0%-5%", "5%-10%", "10%-15%", "15%-20%", "20%-25%", "25%-30%", "30%-35%", "35%-40%", "Over 40%")
+
+top_5_dk_tbl <- 
+  adj_dk_long_recent_15perc_sims_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_5_dk_finish = ifelse(actual_dk_point_rk <= 5, 1, 0),
+         top_5_prediction_range = cut(top5_dk, breaks = top_5_bins, labels = top_5_labels))
+
+top_5_dk_tbl %>% 
+  group_by(top_5_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_5_dk_finishes = sum(actual_top_5_dk_finish)
+            ) %>% 
+  mutate(actual_top_5_percentage = top_5_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_5_prediction_range, actual_top_5_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .45, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
