@@ -1,0 +1,204 @@
+---
+title: "Analyzing Results"
+author: "Jarrod Pelkofer"
+date: "4/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(yardstick)
+library(systemfonts)
+
+theme_set(theme_minimal())
+
+# load sims
+sim_results <- 
+  read_csv("non_adjusted_pts_gained_sims.csv") %>% 
+  bind_rows(read_csv("adjusted_pts_gained_sims.csv")) %>% 
+  bind_rows(read_csv("adjusted_with_course_fit_sims.csv")) %>% 
+  bind_rows(read_csv("non_adjusted_weighted_recent_form_sims.csv")) %>% 
+  bind_rows(read_csv("adjusted_pts_gained_weighted_recent_form_sims.csv")) %>%
+  bind_rows(read_csv("adjusted_course_fit_weighted_recent_form.csv"))
+
+# load actual results
+dk_past_results <- read_csv("dk_past_results.csv")
+
+dk_past_results <-
+  dk_past_results %>%
+  janitor::clean_names() %>%
+  mutate(date = mdy(date)) %>%
+  filter(date %>% between(
+    left = ymd("2019-01-13"),
+    right = ymd("2019-08-25")
+  )) %>%
+  select(player,
+         tournament_id,
+         final_position,
+         dk_total_fp)
+
+tournament_avg_pts_gained <- 
+  dk_past_results %>% 
+  group_by(tournament_id) %>% 
+  summarise(field_avg_dk_pts = mean(dk_total_fp, na.rm = TRUE)) %>% 
+  ungroup()
+
+# join sims with actual
+sims_with_actual <- 
+  sim_results %>% 
+  left_join(tournament_avg_pts_gained, by = "tournament_id") %>% 
+  left_join(dk_past_results, by = c("tournament_id",
+                                    "player_name" = "player")) %>% 
+  mutate(actual_dk_pts_gained = dk_total_fp - field_avg_dk_pts) %>% 
+  distinct() %>% 
+    mutate(Model = case_when(
+    sim_type == "non_adjusted" ~ "Non-Adj",
+    sim_type == "non_adjusted_weighted_recent_form" ~ "Non-Adj, Weighted Form",
+    sim_type == "adjusted" ~ "Adj DKPG",
+    sim_type == "adjusted_with_course_fit" ~ "Adj, Course Difficulty",
+    sim_type == "adjusted_with_weighted_recent_form" ~ "Adj, Weighted Form",
+    sim_type == "adjusted_course_fit_weighted_recent_form" ~ "Adj, Weighted Form, Course Difficulty"
+  ))
+```
+
+
+# Evaluating Top 20 Results
+```{r}
+# Reate Top 20 Ranges
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, Inf)
+top_20_labels <-  c("0-10%", "10-20%", "20-30%", "30-40%", "40-50%", "Over 50%")
+
+top_20_dk_tbl <- 
+  sims_with_actual %>%
+  filter(!is.na(top20_dk)) %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position)) %>%
+  group_by(tournament_id, Model) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels))
+
+top_20_graph <- 
+  top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range, Model) %>% 
+  summarise(`Total Predicted` = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish),
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/`Total Predicted`) %>% 
+  ungroup() %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage, group = Model)) + 
+  geom_point(aes(size = `Total Predicted`)) +
+  geom_line() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual",
+       title = "Figure 4",
+       subtitle = "Predicted Top 20 Probabilites vs. Actual Top 20 Percentages") +
+  facet_wrap(~ Model, scales = "free_x") +
+  theme(plot.title.position = "plot",
+        text = element_text(family = "Calibri"),
+        legend.position = "bottom")
+
+top_20_graph
+```
+
+# Evaluating Top 10 Results
+```{r}
+# Reate Top 20 Ranges
+top_10_bins <-  c(-Inf, 5, 10, 15, 20, 25, 30, 35, 40, Inf)
+top_10_labels <-  c("0-5%", "5-10%", "10-15%", "15-20%", "20-25%", "25-30%", "30-35%", "35-40%", "Over 40%")
+
+top_10_dk_tbl <- 
+  sims_with_actual %>%
+  filter(!is.na(top10_dk)) %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position)) %>%
+  group_by(tournament_id, Model) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top10_dk, breaks = top_10_bins, labels = top_10_labels))
+
+top_10_dk_tbl %>% 
+  group_by(top_10_prediction_range, Model) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ungroup() %>% 
+  ggplot(aes(top_10_prediction_range, actual_top10_percentage, group = Model)) + 
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(breaks = seq(0, 1, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual") +
+  facet_wrap( ~ Model) +
+  theme(legend.position = "none")
+```
+
+# Aggregate Top 20
+```{r}
+top_20_aggregate <- 
+  sims_with_actual %>%
+  filter(!sim_type %>% str_detect("non")) %>%
+  group_by(player_name, tournament_id) %>% 
+  summarise(top_20_agg = mean(top20_dk, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  left_join(select(sims_with_actual, player_name, tournament_id, dk_total_fp) %>% 
+              distinct(), by = c("player_name", "tournament_id")) %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top_20_agg, breaks = top_20_bins, labels = top_20_labels))
+
+top_20_aggregate %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ungroup() %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+
+# Aggregate Top 10
+```{r}
+top_10_aggregate <- 
+  sims_with_actual %>%
+  filter(!sim_type %>% str_detect("non")) %>%
+  group_by(player_name, tournament_id) %>% 
+  summarise(top_10_agg = mean(top10_dk, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  left_join(select(sims_with_actual, player_name, tournament_id, dk_total_fp) %>% 
+              distinct(), by = c("player_name", "tournament_id")) %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top_10_agg, breaks = top_10_bins, labels = top_10_labels))
+
+top_10_aggregate %>% 
+  group_by(top_10_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ungroup() %>% 
+  ggplot(aes(top_10_prediction_range, actual_top10_percentage)) + 
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(breaks = seq(0, 1, .05), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+

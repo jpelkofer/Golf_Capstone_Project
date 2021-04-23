@@ -665,7 +665,7 @@ fix_euro_names <- function(data) {
           player_name == "Soomin Lee" ~ "Soo-min Lee",
           player_name == "Tom Mckibbin (Am)" ~ "Tom Mckibbin",
           player_name == "Trevor Fisher Jnr" ~ "Trevor Fisher",
-          
+          player_name == "Matt Fitzpatrick" ~ "Matthew Fitzpatrick",
           TRUE ~ player_name
         )
     )

@@ -19,60 +19,15 @@ source(file = "simulation_scripts/non_adj_dk_points_gained_sim_script.R")
 plan(multisession, workers = 4)
 
 theme_set(theme_minimal())
-
-dk_past_results <- 
-  read_csv("dk_past_results.csv") %>% 
-  janitor::clean_names() %>% 
-  mutate(date = mdy(date)) %>% 
-  filter(date %>% between(left = ymd("2019-01-13"), right = ymd("2019-08-25")))
 ```
-
-# Remove Tournaments - that are non-cut events or three-day cut event
-```{r}
-dk_past_results <- 
-  dk_past_results %>% 
-  filter(!tournament_id %in% c(401056511, 401056514, 401056516, 401056542, 401056559, 401056543 ))
-```
-
 
 # Pull tournament to sim
 ```{r}
-
-tournaments_to_sim <- 
-  dk_past_results %>% 
-  select(tournament_id, date) %>% 
-  mutate(date = date - days(4)) %>% 
-  distinct()
-
-tournament_ids <- 
-  tournaments_to_sim %>% 
-  pull(tournament_id)
-
-tournament_dates <- 
-  tournaments_to_sim %>% 
-  pull(date)
-
-get_tournament_players <- function(df, tid) {
-  
-  df %>%
-    filter(tournament_id %in% c(tid)) %>%
-    pull(player)
-  
-}
-
-tournament_players_tbl <-
-  map(tournament_ids, ~ get_tournament_players(dk_past_results, .x)) %>% 
-  enframe(value = "players") %>% 
-  bind_cols(tournament_id = tournament_ids, date = tournament_dates) %>% 
-  unnest(players) %>% 
-  nest(-name)
-
-
-
+tournament_players_tbl <- 
+  read_rds("tournament_players_tbl.rds")
 ```
 
-# Run Simulations
-
+# Run Simulations - non weighted
 ```{r}
 non_adjusted_dk_pts_gained_sims_summarized <- 
   tournament_players_tbl %>%
@@ -88,4 +43,23 @@ non_adjusted_dk_pts_gained_sims_summarized_tbl %>%
   select(-name) %>% 
   mutate(sim_type = "non_adjusted") %>% 
   write_csv("simulation_results/non_adjusted_pts_gained_sims.csv")
+```
+
+# 2019 Sims w/ weighted recent form
+```{r}
+non_adjusted_dk_pts_gained_sims_summarized <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x, cut_range = 70, six_week_weight = 1.60,
+                                                       three_month_weight = 1.30), otherwise = NA))
+
+non_adjusted_dk_pts_gained_sims_summarized_tbl <- 
+  non_adjusted_dk_pts_gained_sims_summarized %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+
+non_adjusted_dk_pts_gained_sims_summarized_tbl %>%
+  select(-name) %>% 
+  mutate(sim_type = "non_adjusted_weighted_recent_form") %>% 
+  write_csv("simulation_results/non_adjusted_weighted_recent_form_sims.csv")
 ```

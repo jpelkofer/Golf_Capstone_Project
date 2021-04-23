@@ -89,7 +89,7 @@ player_adj_dk_gained_sim <- function(df, n = 5, easy = 2, medium = 9, hard = 7, 
 }
 
 complete_simulation_framework <- function(df, num_of_sims = 10000, cut_range = 65, date_range = 365, 
-                                          six_week_weight = 1.25, three_month_weight = 1.125, six_month_weight = 1.0625) {
+                                          six_week_weight = 1.65, three_month_weight = 1.0, six_month_weight = 1.0) {
   
   plan(multisession, workers = 4)
   

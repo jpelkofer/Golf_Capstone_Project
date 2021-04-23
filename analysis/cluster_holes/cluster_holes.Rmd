@@ -49,7 +49,7 @@ holes_data <-
     player_name == "Ali Al-Shahrani" ~ "Ali Al Shahrani",
     TRUE ~ player_name
   )) %>%
-  filter(season %in% c(recent_seasons)) %>% 
+  filter(season %in% c(seasons)) %>% 
   select(player_name, season:course_id, round:yards, score_type, dk_pts_classic, field_dk_classic_avg, dk_pts_gained_classic) %>% 
   collect()
 ```
@@ -125,7 +125,7 @@ adj_dk_pts_gained_2016_17_18 <-
   bind_rows(adj_dk_pts_gained_2017) %>% 
   bind_rows(adj_dk_pts_gained_2018)
 
-write_csv(adj_dk_pts_gained_2016_17_18, "adj_dk_pts_gained_2016_17_18.csv")
+write_csv(adj_dk_pts_gained_2016_17_18, "past_holes_categorized/adj_dk_pts_gained_2016_17_18.csv")
 
 adj_dk_pts_gained_2016_17_18 <- read_csv(file = "adj_dk_pts_gained_2016_17_18.csv")
 

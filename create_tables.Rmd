@@ -1,0 +1,76 @@
+---
+title: "Untitled"
+author: "Jarrod Pelkofer"
+date: "4/22/2021"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(gt)
+
+apa <- function(x, title = " ") {
+  gt(x) %>%
+    tab_options(
+      table.border.top.style = "hidden",
+      heading.title.font.size = px(16),
+      column_labels.border.top.width = 2,
+      column_labels.border.top.color = "black",
+      column_labels.border.bottom.width = 2,
+      column_labels.border.bottom.color = "black",
+      table_body.border.bottom.color = "black",
+      table.border.bottom.color = "white",
+      table.width = pct(100),
+      table.background.color = "white",
+      table.font.names = "calibri"
+    ) %>%
+    cols_align(align="center") %>%
+    tab_style(
+      style = list(
+        cell_borders(
+          sides = c("top", "bottom", "left", "right"),
+          # color = "white",
+          weight = px(0)
+        ),
+        cell_text(
+          align="center"
+        ),
+        cell_fill(color = "white", alpha = NULL)
+      ),
+      locations = cells_body(
+        columns = everything(),
+        rows = everything()
+      )
+    ) %>%
+    #title setup
+    tab_header(
+      title = title
+    ) %>%
+    opt_align_table_header(align = "left")
+}
+```
+
+# Table 1
+```{r}
+# Create Table 1
+dkpg_example_tbl <- tibble(
+  Player = c("A", "B", "C"),
+  `Course ID` = 100,
+  Round = 1,
+  Hole = 9,
+  `Draft Kings Pts Scored` = c(.5, 1.5, 1),
+  `Field Average` = 1,
+  `Draft Kings Pts Gained` = c(-.5, .50, 0)
+)
+
+table_1 <- apa(dkpg_example_tbl, "Table 1")
+
+table_1
+```
+
