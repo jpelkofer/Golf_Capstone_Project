@@ -13,7 +13,7 @@ tournament <- get_tournaments("pga", 2021)
 # Filter for tournament that needs to be added to DB ----
 tournament <- 
   tournament %>% 
-  filter(tournament_id %in% c("401243010")) %>% 
+  filter(tournament_id %in% c("401243011")) %>% 
   pmap_dfr(scrape_tournament_locations)
 
 #* Get player data for tournament ----
@@ -30,7 +30,7 @@ pga_player_data <-
   prepare_data_for_db()
 
 #* Get hole descriptions from tournament ----
-hole_descriptions <- scrape_hole_description_function("pga", "401243010") #%>% mutate(tournament_id = "401243010")
+hole_descriptions <- scrape_hole_description_function("pga", "401243011") #%>% mutate(tournament_id = "401243010")
 
 
 # Examine Data ----
@@ -109,10 +109,10 @@ rounds %>%
   left_join(players) %>% 
   filter(player_id %>% is.na())
 
-# tbl(con, "rounds_tbl") %>%
-#   select(player_name) %>%
-#   filter(player_name %>% str_detect("Hart")) %>%
-#   distinct()
+tbl(con, "rounds_tbl") %>%
+  select(player_name) %>%
+  filter(player_name %>% str_detect("Flores")) %>%
+  distinct()
 
 DBI::dbAppendTable(conn = con, "rounds_tbl", rounds)
 DBI::dbAppendTable(conn = con, "holes_tbl", holes)
@@ -126,7 +126,7 @@ tournament <- get_tournaments("ntw", 2021)
 # Filter for tournament that needs to be added to DB ----
 tournament <- 
   tournament %>% 
-  filter(tournament_id %in% c("401262688")) %>% 
+  filter(tournament_id %in% c("401262691")) %>% 
   pmap_dfr(scrape_tournament_locations)
 
 #* Get player data for tournament ----
@@ -143,7 +143,7 @@ ntw_player_data <-
   prepare_data_for_db() 
 
 #* Get hole descriptions from tournament ----
-hole_descriptions <- scrape_hole_description_function("ntw", "401262688")
+hole_descriptions <- scrape_hole_description_function("ntw", "401262691")
 
 # Examine Data ----
 rounds <-

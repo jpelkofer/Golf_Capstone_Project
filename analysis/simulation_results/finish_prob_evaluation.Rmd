@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(yardstick)
-library(systemfonts)
+library(ggtext)
 
 theme_set(theme_minimal())
 
@@ -97,10 +97,12 @@ top_20_graph <-
   scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
   labs(x = "Predicted",
        y = "Actual",
-       title = "Figure 4",
-       subtitle = "Predicted Top 20 Probabilites vs. Actual Top 20 Percentages") +
+       title = "<b>Figure 4</b>",
+       subtitle = "<br><b><em>Predicted Top 20 Probabilites vs. Actual Top 20 Percentages</em><b>") +
   facet_wrap(~ Model, scales = "free_x") +
   theme(plot.title.position = "plot",
+        plot.title = element_markdown(size = 10),
+        plot.subtitle = element_markdown(size = 10),
         text = element_text(family = "Calibri"),
         legend.position = "bottom")
 

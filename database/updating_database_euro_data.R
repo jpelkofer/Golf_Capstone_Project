@@ -12,7 +12,7 @@ tournaments_2021 <- get_tournaments("euro", 2021) %>% as_tibble()
 # Filter for tournament needed ----
 tournament <- 
   tournaments_2021 %>% 
-  filter(tournament_name %in% c("Kenya Savannah Classic supported by Absa"))
+  filter(tournament_name %in% c("Gran Canaria Lopesan Open"))
 
 #* Get tournament id ----
 tournament_id <-
@@ -86,6 +86,7 @@ stats_data <-
 
 stats_data <- 
   stats_data %>% 
+  select(player_id:putts_per_gir) %>%
   drop_na()
 
 stats_data %>% 
@@ -119,6 +120,19 @@ check_holes_data(holes)
 #stats
 check_stats_data(stats)
 
+# Fix Names
+rounds <- 
+  rounds %>% 
+  fix_euro_names()
+
+holes <- 
+  holes %>% 
+  fix_euro_names()
+
+stats <- 
+  stats %>% 
+  fix_euro_names()
+
 #* Connect to Postgres DB ----
 library(DBI)
 library(RPostgres)
@@ -127,6 +141,24 @@ con <- dbConnect(drv = RPostgres::Postgres(),
                  user = "postgres", 
                  password = keyring::key_get("postgres_db", "postgres"), 
                  dbname = "golf_db")
+
+# check if adding a new name
+players <- 
+  tbl(con, "rounds_tbl") %>%
+  select(player_name, player_id) %>% 
+  distinct() %>% 
+  collect()
+
+rounds %>% 
+  select(player_name) %>% 
+  distinct() %>% 
+  left_join(players) %>% 
+  filter(player_id %>% is.na())
+
+tbl(con, "rounds_tbl") %>%
+  select(player_name) %>%
+  filter(player_name %>% str_detect("Wu")) %>%
+  distinct()
 
 # Append data to db tables ----
 DBI::dbAppendTable(conn = con, "rounds_tbl", rounds)

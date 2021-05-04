@@ -520,7 +520,7 @@ fix_euro_names <- function(data) {
           player_name == "Rory Mcilroy" ~ "Rory McIlroy",
           player_name == "S?ren Kjeldsen" ~ "Soren Kjeldsen",
           player_name == "Thomas Bj?rn" ~ "Thomas Bjorn",
-          player_name == "Thorbj?rn Olesen" ~ "Thorbjorn Olesen",
+          player_name == "Thorbjørn Olesen" ~ "Thorbjorn Olesen",
           player_name == "Ali Al-Shahrani" ~ "Ali Al Shahrani", # updates needed 2/26 starting here and below
           player_name == "Ashun Wu" ~ "A-Shun Wu",
           player_name == "Bryden Macpherson" ~ "Bryden MacPherson",

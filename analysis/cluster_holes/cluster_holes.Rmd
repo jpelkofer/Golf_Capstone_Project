@@ -20,6 +20,7 @@ library(embed)
 library(plotly)
 library(DataExplorer)
 library(furrr)
+library(ggtext)
 
 
 plan(multisession, workers = 4)
@@ -139,17 +140,17 @@ write_csv(adj_dk_pts_gained_2016_2020, "adj_dk_pts_gained_2016_2020.csv")
 
 # Start of Kmeans
 ```{r}
-adj_dk_pts_gained_2016_17_18 <- read_csv("adj_dk_pts_gained_2016_17_18.csv")
+adj_dk_pts_gained_2016_17_18 <- read_csv("past_holes_categorized/adj_dk_pts_gained_2016_17_18.csv")
 
 kmeans_feature_tbl <- 
   adj_dk_pts_gained_2016_17_18 %>% 
   select(tournament_round_id, hole, par, yards, adj_field_dk_avg) %>% 
   distinct()
 
-kmeans_feature_tbl <- 
-  adj_dk_pts_gained_2016_2020 %>% 
-  select(tournament_round_id, hole, par, yards, adj_field_dk_avg) %>% 
-  distinct()
+# kmeans_feature_tbl <- 
+#   adj_dk_pts_gained_2016_2020 %>% 
+#   select(tournament_round_id, hole, par, yards, adj_field_dk_avg) %>% 
+#   distinct()
 ```
 
 # Kmeans Recipe
@@ -176,7 +177,7 @@ kmeans_mapper <- function(centers = 3) {
     
     kmeans_feature_data_baked %>%
         select(-tournament_round_id, -hole, -par, -yards) %>%
-        kmeans(centers = centers, nstart = 1)
+        kmeans(centers = centers, nstart = 100)
   
 }
 
@@ -185,13 +186,27 @@ kmeans_mapped_tbl <-
     mutate(k_means = centers %>% map(kmeans_mapper)) %>%
     mutate(glance  = k_means %>% map(glance))
 
-kmeans_mapped_tbl %>% 
+kmeans_skree <- 
+  kmeans_mapped_tbl %>% 
   unnest(glance) %>% 
   select(centers, tot.withinss) %>% 
   ggplot(aes(centers, tot.withinss)) +
   geom_point() +
   geom_line() +
-  scale_x_continuous(breaks = c(1:9))
+  scale_x_continuous(breaks = c(1:9)) +
+  theme_minimal() +
+  labs(title = "<b>Figure 1</b>
+       <br>",
+       subtitle = "<b><em>K-Means Skree Plot</em></b>
+       <br>
+       <br>") +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_markdown(size = 10),
+    plot.subtitle = element_markdown(size = 10)
+  )
+
+kmeans_skree
 
 #pluck centers = 3
 kmeans_3_obj <- 

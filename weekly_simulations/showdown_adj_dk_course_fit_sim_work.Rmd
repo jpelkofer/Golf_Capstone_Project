@@ -1,0 +1,100 @@
+---
+title: "masters_2021_showdown_sims"
+author: "Jarrod Pelkofer"
+date: "4/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+source(file = "analysis/simulation_scripts/showdown_adj_dk_course_fit_sim_script.R")
+
+theme_set(theme_minimal())
+
+```
+
+```{r}
+# Bring in hole category data and join with tournament name
+
+con <- dbConnect(
+  drv = RPostgres::Postgres(),
+  user = "postgres",
+  password = keyring::key_get("postgres_db", "postgres"),
+  dbname = "golf_db",
+)
+
+tournaments_tbl <- tbl(con, "tournaments_tbl") %>% collect()
+
+hole_categories_tbl <- 
+  read_csv("analysis/hole_categories_sd_2016_2020_tbl.csv") %>% 
+  separate(col = tournament_round_id, into = "tournament_id", sep = "_", remove = FALSE) %>% 
+  # select(tournament_id, hole_category, adj_field_dk_avg) %>% 
+  left_join(select(tournaments_tbl, tournament_id, tour, season, tournament_name, course), by = "tournament_id") %>% 
+  filter(tournament_name %>% str_detect("Masters Tournament")) %>% 
+  summarise(easy = round(sum(hole_category =="easy")/n()*18),
+            hard = round(sum(hole_category =="hard")/n()*18),
+            medium = round(sum(hole_category =="medium")/n()*18))
+
+
+easy <- hole_categories_tbl %>% pull(easy)
+medium <- hole_categories_tbl %>% pull(medium)
+hard <- hole_categories_tbl %>% pull(hard)
+```
+
+# Read in Past Hole Category Data
+```{r}
+hole_category_values <- 
+  read_csv("analysis/hole_categories_sd_2016_2020_tbl.csv") %>% 
+  group_by(hole_category) %>% 
+  summarise(min_adj_field_dk_avg = min(adj_field_dk_avg, na.rm = TRUE),
+            max_adj_field_dk_avg = max(adj_field_dk_avg, na.rm = TRUE)) %>% 
+  filter(hole_category == "medium") %>% 
+  pivot_longer(-hole_category) %>% 
+  pull(value)
+```
+
+# Current Year Sim
+```{r}
+# load players
+dr <- read_csv("dk_rd_4_late.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(dk_salary > 0) %>% 
+  mutate(date = ymd("2021-04-07")) %>% 
+  mutate(tournament_id = "401243010") %>% 
+    rename(players = dk_name) %>%
+  mutate(
+    players = case_when(
+      players == "Alex Noren" ~ "Alexander Noren",
+      players == "Robert Macintyre" ~ "Robert MacIntyre",
+      players == "Erik Van Rooyen" ~ "Erik van Rooyen",
+      players == "Rafa Cabrera Bello" ~ "Rafael Cabrera Bello",
+      players == "Seung-Yul Noh" ~ "Seung-yul Noh",
+      players == "Carlos Sainz" ~ "Carlos Sainz Jr.",
+      TRUE ~ players
+    )
+  ) %>% 
+  mutate(easy = easy,
+         medium = medium, 
+         hard = hard)
+
+adj_dk_course_fit_masters_sd_sims_2021 <- 
+  dr %>%
+  select(players, tournament_id, date, easy, medium, hard) %>% 
+  complete_simulation_framework()
+```
+
+
+```{r}
+# dk_rd_2 <- read_csv("dk_rd_2.csv") %>% 
+#   janitor::clean_names()
+
+adj_course_fit_and_dg_sims <- 
+  dr %>% 
+  select(players, dk_salary, total_points) %>% 
+  mutate(pts_rank = min_rank(-total_points)) %>% 
+  left_join(adj_dk_course_fit_masters_sd_sims_2021, by = c("players" = "player_name"))
+```
+

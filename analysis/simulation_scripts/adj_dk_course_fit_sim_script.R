@@ -4,6 +4,10 @@ library(tidyverse)
 library(lubridate)
 library(tidymodels)
 library(furrr)
+library(ROI)
+library(ROI.plugin.glpk)
+library(ompr)
+library(ompr.roi)
 
 get_player_sims <- function(sims, scores, n_samples) {
   
@@ -88,8 +92,37 @@ player_adj_dk_gained_sim <- function(df, n = 5, easy = 2, medium = 9, hard = 7, 
   left_join(rds_1_and_2_tbl, rds_3_and_4_tbl)
 }
 
+optimal_lineup_function <- function(df) {
+  
+  max_salary <- 50000
+  max_players <-  6
+  num_of_players <- length(df$player_name)
+  salaries <- df$salary
+  dk_pts_gained <- df$dk_total_pts_gained
+  
+  MIPModel() %>%
+    add_variable(x[i], i = 1:num_of_players, type = "binary") %>%
+    add_constraint(sum_expr(x[i], i = 1:num_of_players) == max_players) %>%
+    add_constraint(sum_expr(salaries[i] * x[i], i = 1:num_of_players) <= max_salary) %>%
+    set_objective(sum_expr(dk_pts_gained[i] * x[i], i = 1:num_of_players), "max") %>%
+    solve_model(with_ROI(solver = "glpk")) %>%
+    get_solution(x[i]) %>%
+    mutate(
+      sim_num = df$sim_num,
+      player_name = df$player_name,
+      salary = df$salary,
+      dk_total_pts_gained = df$dk_total_pts_gained
+    ) %>%
+    filter(value > 0) %>%
+    select(sim_num, player_name, salary, dk_total_pts_gained)
+  
+}
+
+
+
 complete_simulation_framework <- function(df, num_of_sims = 10000, cut_range = 65, date_range = 365, 
-                                          six_week_weight = 1.65, three_month_weight = 1.0, six_month_weight = 1.0) {
+                                          six_week_weight = 1.65, three_month_weight = 1.0, six_month_weight = 1.0,
+                                          optimals = FALSE) {
   
   plan(multisession, workers = 4)
   
@@ -226,7 +259,8 @@ complete_simulation_framework <- function(df, num_of_sims = 10000, cut_range = 6
     ungroup()
   
   # Sims Summarized
-  tournament_sims %>%
+  sims_summarized <- 
+    tournament_sims %>%
     group_by(player_name) %>%
     summarise(
       avg_dk_pts_gained = mean(dk_total_pts_gained),
@@ -240,5 +274,21 @@ complete_simulation_framework <- function(df, num_of_sims = 10000, cut_range = 6
     arrange(desc(top20_dk)) %>%
     ungroup() %>%
     mutate(tournament_id = tournament_id)
+  
+  # Run optimal lineups for each sim
+  if (optimals == TRUE) {
+    
+    optimal_lineups <- 
+      tournament_sims %>% 
+      left_join(select(df, players, salary), by = c("player_name" = "players")) %>%
+      mutate(sim_num = sim) %>% 
+      nest(results = -sim) %>% 
+      pull(results) %>% 
+      map(optimal_lineup_function) %>% 
+      bind_rows()
+    
+    list(optimal_lineups, sims_summarized)
+    
+  } else sims_summarized
   
 }

@@ -1,0 +1,250 @@
+---
+title: "masters_2021_adj_dk_course_fit_sim_work"
+author: "Jarrod Pelkofer"
+date: "4/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+source(file = "analysis/simulation_scripts/adj_dk_course_fit_sim_script.R")
+
+theme_set(theme_minimal())
+
+# Past Masters Results
+dk_past_results <- 
+  read_csv("analysis/dk_past_results.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(tournament_name %>% str_detect("Valspar") & season %in% c(2017:2021)) %>% 
+  mutate(date = mdy(date)) %>% 
+  select(player, tournament_id, season, date, dk_total_fp, final_position)
+```
+
+# Bring in hole category data and join with tournament name
+```{r}
+con <- dbConnect(
+  drv = RPostgres::Postgres(),
+  user = "postgres",
+  password = keyring::key_get("postgres_db", "postgres"),
+  dbname = "golf_db",
+)
+
+tournaments_tbl <- tbl(con, "tournaments_tbl") %>% collect()
+
+hole_categories_tbl <- 
+  read_csv("analysis/cluster_holes/past_holes_categorized/hole_categories_2016_2020_tbl.csv") %>% 
+  separate(col = tournament_round_id, into = "tournament_id", sep = "_", remove = FALSE) %>% 
+  # select(tournament_id, hole_category, adj_field_dk_avg) %>% 
+  left_join(select(tournaments_tbl, tournament_id, tour, season, tournament_name, course), by = "tournament_id") %>% 
+  filter(tournament_name %>% str_detect("Valspar")) %>% 
+  summarise(easy = round(sum(hole_category =="easy")/n()*18),
+            hard = round(sum(hole_category =="hard")/n()*18),
+            medium = round(sum(hole_category =="medium")/n()*18)) #%>% 
+  # mutate(medium = 5)
+
+
+easy <- hole_categories_tbl %>% pull(easy)
+medium <- hole_categories_tbl %>% pull(medium)
+hard <- hole_categories_tbl %>% pull(hard)
+```
+
+# Read in Past Hole Category Data
+```{r}
+hole_category_values <- 
+  read_csv("analysis/cluster_holes/past_holes_categorized/hole_categories_2016_2020_tbl.csv") %>% 
+  group_by(hole_category) %>% 
+  summarise(min_adj_field_dk_avg = min(adj_field_dk_avg, na.rm = TRUE),
+            max_adj_field_dk_avg = max(adj_field_dk_avg, na.rm = TRUE)) %>% 
+  filter(hole_category == "medium") %>% 
+  pivot_longer(-hole_category) %>% 
+  pull(value)
+```
+
+# Pull Past Masters Data for Simulation
+```{r}
+
+tournaments_to_sim <- 
+  dk_past_results %>% 
+  select(tournament_id, date) %>% 
+  mutate(date = date - days(4)) %>% 
+  distinct()
+
+tournament_ids <- 
+  tournaments_to_sim %>% 
+  pull(tournament_id)
+
+tournament_dates <- 
+  tournaments_to_sim %>% 
+  pull(date)
+
+get_tournament_players <- function(df, tid) {
+  
+  df %>%
+    filter(tournament_id %in% c(tid)) %>%
+    pull(player)
+  
+}
+
+tournament_players_tbl <-
+  map(tournament_ids, ~ get_tournament_players(dk_past_results, .x)) %>% 
+  enframe(value = "players") %>% 
+  bind_cols(tournament_id = tournament_ids, date = tournament_dates) %>% 
+  unnest(players) %>% 
+  mutate(easy = easy,
+         medium = medium, 
+         hard = hard) %>% 
+  nest(-name)
+
+```
+
+# Run Past Masters Simulations
+```{r}
+weighted_course_fit_sims_summarized <- 
+  tournament_players_tbl %>%
+  select(data) %>% 
+  pmap(purrr::possibly(~ complete_simulation_framework(.x, cut_range = 50, date_range = 360,
+                                                       six_week_weight = 1, three_month_weight = 1, six_month_weight = 1), otherwise = NA))
+
+weighted_course_fit_sims_tbl <- 
+  weighted_course_fit_sims_summarized %>% 
+  enframe(value = "sims") %>% 
+  unnest(sims)
+
+# Sims vs. Actual
+
+weighted_course_fit_sims_tbl_with_actual_tbl <- 
+  weighted_course_fit_sims_tbl %>%
+  left_join(
+    select(
+      dk_past_results,
+      player,
+      tournament_id,
+      season,
+      final_position,
+      dk_total_fp
+    ),
+    by = c("tournament_id",
+      "player_name" = "player")
+  ) %>% 
+  mutate(final_position = ifelse(is.na(final_position), 100, final_position))
+```
+
+# Evaluating Top 20 Prob
+```{r}
+top_20_bins <-  c(-Inf, 10, 20, 30, 40, 50, 60, Inf)
+top_20_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "40%-50%", "50%-60%", "Over 60%")
+
+top_20_dk_tbl <- 
+  weighted_course_fit_sims_tbl_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_20_dk_finish = ifelse(actual_dk_point_rk <= 20, 1, 0),
+         top_20_prediction_range = cut(top20_dk, breaks = top_20_bins, labels = top_20_labels)) %>% 
+  select(top_20_prediction_range, actual_top_20_dk_finish)
+
+top_20_dk_tbl %>% 
+  group_by(top_20_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_20_dk_finishes = sum(actual_top_20_dk_finish)
+            ) %>% 
+  mutate(actual_top20_percentage = top_20_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_20_prediction_range, actual_top20_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, 1, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+```
+
+```{r}
+# Evaluating Top 10 Prob
+top_10_bins <-    c(-Inf, 10,  20,  30, 40, Inf)
+top_10_labels <-  c("0%-10%", "10%-20%", "20%-30%", "30%-40%", "Over 40%")
+
+top_10_dk_tbl <- 
+  weighted_course_fit_sims_tbl_with_actual_tbl %>% 
+  group_by(tournament_id) %>% 
+  mutate(actual_dk_point_rk = min_rank(-dk_total_fp)) %>%
+  ungroup() %>% 
+  mutate(actual_top_10_dk_finish = ifelse(actual_dk_point_rk <= 10, 1, 0),
+         top_10_prediction_range = cut(top10_dk, breaks = top_10_bins, labels = top_10_labels))
+
+top_10_dk_tbl %>% 
+  group_by(top_10_prediction_range) %>% 
+  summarise(total_predicted = n(),
+            top_10_dk_finishes = sum(actual_top_10_dk_finish)
+            ) %>% 
+  mutate(actual_top_10_percentage = top_10_dk_finishes/total_predicted) %>% 
+  ggplot(aes(top_10_prediction_range, actual_top_10_percentage)) + 
+  geom_point() +
+  scale_y_continuous(breaks = seq(0, .40, .10), labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Predicted",
+       y = "Actual")
+
+```
+
+# Current Year Sim
+```{r}
+# load players
+dr <- read_csv("analysis/dr.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(date = ymd("2021-04-28")) %>% 
+  mutate(tournament_id = "401243433") %>% 
+    rename(players = player) %>%
+  mutate(
+    players = case_when(
+      players == "Alex Noren" ~ "Alexander Noren",
+      players == "Robert Macintyre" ~ "Robert MacIntyre",
+      players == "Erik Van Rooyen" ~ "Erik van Rooyen",
+      players == "Rafa Cabrera Bello" ~ "Rafael Cabrera Bello",
+      players == "Seung-Yul Noh" ~ "Seung-yul Noh",
+      players == "Carlos Sainz" ~ "Carlos Sainz Jr.",
+      TRUE ~ players
+    )
+  ) %>% 
+  mutate(easy = easy,
+         medium = medium, 
+         hard = hard)
+
+df <-
+  dr %>%
+  select(players, salary, tournament_id, date, easy, medium, hard) 
+
+adj_dk_course_fit_sims <- 
+  dr %>%
+  select(players, salary, tournament_id, date, easy, medium, hard) %>% 
+  complete_simulation_framework(num_of_sims = 10, cut_range = 65,six_week_weight = 1.65,three_month_weight = 1.00,six_month_weight = 1.00, optimals = FALSE)
+```
+
+# Compare with DataGolf
+```{r}
+adj_course_fit_and_dg_sims <- 
+  dr %>% 
+  select(players, ownership, salary, top_20:win, points) %>% 
+  left_join(sims_summarized, by = c("players" = "player_name")) %>% 
+  mutate(lineup_lev = (optimal_lu_percentage * 100) - ownership,
+         top_5_lev = top5_dk - ownership,
+         top_10_lev = top10_dk - ownership,
+         top_20_lev = top20_dk - ownership)
+
+optimal_lineups %>% 
+  group_by(player_name) %>% 
+  summarise(opt_lineup_perc = n()/10000*100) %>% 
+  arrange(desc(opt_lineup_perc)) %>% 
+  ungroup() %>% 
+  left_join(select(dr, players, salary, ownership), by = c("player_name"= "players")) %>% 
+  mutate(leverage = opt_lineup_perc - ownership) %>% View()
+
+optimal_lineups %>% 
+  group_by(sim_num) %>% 
+  summarise(total_pts = sum(dk_total_pts_gained)) %>%
+  arrange(desc(total_pts)) %>% View()
+
+optimal_lineups %>% 
+  filter(sim_num == "X9632")
+
+
+```
